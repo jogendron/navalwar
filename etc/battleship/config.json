@@ -1,0 +1,9 @@
+{
+    "window": {
+        "title": "Battleship",
+        "resolution": {
+            "width": 1280,
+            "height": 720
+        }
+    }
+}
