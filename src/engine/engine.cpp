@@ -28,6 +28,8 @@ Engine::Engine::Engine()
         throw std::runtime_error("Cannot create SDL window");
     }
 
+    SDL_SetRenderDrawBlendMode(_renderer, SDL_BLENDMODE_BLEND);
+
     _resourceManager = std::make_shared<ResourceManager>(_renderer);
 }
 

@@ -1,14 +1,18 @@
-#include "engine/game.hpp"
+#include "engine/entity.hpp"
 #include "engine/engine.hpp"
 
 using namespace Engine;
 
-Game::Game()
+Entity::Entity()
 {
     Engine& engine = Engine::getInstance();
 
-    _configuration = engine.getConfiguration();
     _resourceManager = engine.getResourceManager();
+
     _window = engine.getWindow();
     _renderer = engine.getRenderer();
+}
+
+Entity::~Entity()
+{
 }

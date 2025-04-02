@@ -19,8 +19,6 @@ namespace Engine
     
             virtual void update() = 0;
             virtual void render() = 0;
-
-            void draw(Image * image);
     
         protected:
             std::shared_ptr<Configuration> _configuration;

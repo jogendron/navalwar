@@ -11,11 +11,15 @@ find_package(jsoncpp REQUIRED)
 add_executable(battleship
     src/main.cpp
     src/battleship_game.cpp
+    src/grid.cpp
+    src/cell.cpp
     src/engine/configuration.cpp
     src/engine/engine.cpp
+    src/engine/entity.cpp
     src/engine/game.cpp
     src/engine/image.cpp
     src/engine/path_factory.cpp
+    src/engine/position.cpp
     src/engine/resolution.cpp
     src/engine/resource_manager.cpp
 )
