@@ -28,7 +28,8 @@ Engine::Engine::Engine()
         throw std::runtime_error("Cannot create SDL window");
     }
 
-    SDL_SetRenderDrawBlendMode(_renderer, SDL_BLENDMODE_BLEND);
+    SDL_SetRenderVSync(_renderer, 1);
+    SDL_SetRenderDrawBlendMode(_renderer, SDL_BLENDMODE_BLEND); // Enable alpha blending
 
     _resourceManager = std::make_shared<ResourceManager>(_renderer);
 }
@@ -97,6 +98,8 @@ void Engine::Engine::run(std::shared_ptr<Game> game)
         {
             if (event.type == SDL_EVENT_QUIT)
                 running = false;
+            else
+                game->processEvent(event);
         }
 
         // Update

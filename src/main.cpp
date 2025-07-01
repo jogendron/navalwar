@@ -1,3 +1,4 @@
+#include <iostream>
 #include <memory>
 
 #include "engine/engine.hpp"
@@ -6,7 +7,7 @@
 int main(int argc, char * argv[])
 {
     int rv = 0;
-    std::shared_ptr<Engine::Game> game = 0;
+    std::shared_ptr<Engine::Game> game = nullptr;
 
     try
     {
@@ -18,6 +19,7 @@ int main(int argc, char * argv[])
     catch(const std::exception & e)
     {
         rv = 1;
+        std::cerr << "An error occurred: " << e.what() << std::endl;
     }
     
     Engine::Engine::quit();

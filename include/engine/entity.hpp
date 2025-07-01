@@ -13,6 +13,7 @@ namespace Engine
             Entity();
             ~Entity();
 
+            virtual void update();
             virtual void draw() = 0;
 
         protected:

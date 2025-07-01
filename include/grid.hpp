@@ -3,10 +3,12 @@
 
 #include <array>
 #include <memory>
+#include <string>
 
 #include "engine/entity.hpp"
 #include "engine/image.hpp"
 #include "cell.hpp"
+#include "ship.hpp"
 
 class Grid : public Engine::Entity
 {
@@ -14,8 +16,11 @@ class Grid : public Engine::Entity
         Grid(const Engine::Position & position);
         ~Grid();
 
-        void draw();
+        Cell & getCell(const std::string & positionName);
 
+        void snap(Ship & ship) const;
+        void draw();
+        
     private:
         Engine::Position _position;
         std::unique_ptr<Engine::Image> _gridImage;

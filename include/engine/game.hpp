@@ -17,6 +17,7 @@ namespace Engine
             Game();
             virtual ~Game() = default;
     
+            virtual void processEvent(const SDL_Event & event) = 0;
             virtual void update() = 0;
             virtual void render() = 0;
     

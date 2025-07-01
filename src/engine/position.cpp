@@ -1,4 +1,5 @@
 #include "engine/position.hpp"
+#include "engine/engine.hpp"
 
 using namespace Engine;
 
@@ -12,26 +13,34 @@ Position::Position(float x, float y)
 {
 }
 
-Engine::Position::~Position()
+Position::~Position()
 {
 }
 
-const float & Engine::Position::getX() const
+const float & Position::getX() const
 {
     return _x;
 }
 
-const float & Engine::Position::getY() const
+const float & Position::getY() const
 {
     return _y;
 }
 
-void Engine::Position::setX(const float & value)
+void Position::setX(const float & value)
 {
     _x = value;
 }
 
-void Engine::Position::setY(const float & value)
+void Position::setY(const float & value)
 {
     _y = value;
+}
+
+Position Position::scale(const Resolution& from, const Resolution& to) const
+{
+    return Position(
+        to.getWidth() * _x / from.getWidth(),
+        to.getHeight() * _y / from.getHeight()
+    );
 }

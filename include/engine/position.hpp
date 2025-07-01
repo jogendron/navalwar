@@ -1,6 +1,8 @@
 #ifndef __BATTLESHIP_ENGINE_POSITION_HPP
 #define __BATTLESHIP_ENGINE_POSITION_HPP
 
+#include "engine/resolution.hpp"
+
 namespace Engine
 {
     class Position
@@ -15,6 +17,8 @@ namespace Engine
 
             void setX(const float & value);
             void setY(const float & value);
+
+            Position scale(const Resolution& from, const Resolution& to) const;
         
         private:
             float _x;

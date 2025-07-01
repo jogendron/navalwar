@@ -2,6 +2,7 @@
 #define __BATTLESHIP_ENGINE_IMAGE_HPP
 
 #include "configuration.hpp"
+#include "dimensions.hpp"
 #include "position.hpp"
 #include "resource_manager.hpp"
 
@@ -21,15 +22,25 @@ namespace Engine
             );
             ~Image();
 
-            const Position & getPosition();
+            Position & getPosition();
             SDL_Texture * getTexture();
+            const Dimensions & getDimensions();
+            const float & getRotation() const;
+            const SDL_FPoint & getRotationCenter() const;
+
+            void setPosition(const Position & position);
+            void setRotation(const float & rotation);
+            void setRotationCenter(SDL_FPoint center);
 
             void draw();
 
         protected:
-            std::string _path;
             std::shared_ptr<ResourceManager> _resourceManager;
+            std::string _path;
             Position _position;
+            Dimensions _dimensions;
+            float _rotation;
+            SDL_FPoint _rotationCenter;
 
         private:
             SDL_Window * _window;
