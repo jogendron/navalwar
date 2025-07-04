@@ -1,6 +1,8 @@
 #ifndef __BATTLESHIP_ENGINE_DIMENSIONS_HPP
 #define __BATTLESHIP_ENGINE_DIMENSIONS_HPP
 
+#include "engine/resolution.hpp"
+
 namespace Engine
 {
     class Dimensions
@@ -12,6 +14,8 @@ namespace Engine
 
             const int getWidth() const;
             const int getHeight() const;
+
+            Dimensions scale(const Resolution& from, const Resolution& to) const;
 
         private:
             int _width;

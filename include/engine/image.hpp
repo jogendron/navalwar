@@ -42,10 +42,15 @@ namespace Engine
             float _rotation;
             SDL_FPoint _rotationCenter;
 
+            virtual SDL_FRect getSourceRectangle();
+            virtual SDL_FRect getDestinationRectangle();
+
         private:
             SDL_Window * _window;
             SDL_Renderer * _renderer;
             std::shared_ptr<SDL_Texture> _texture = NULL;
+
+            
     };
 }
 

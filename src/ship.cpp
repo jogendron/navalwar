@@ -42,7 +42,7 @@ const bool Ship::isCollisionCheckRequested() const
     return _collisionCheckRequested;
 }
 
-const bool Ship::collidesWith(const Ship& otherShip)
+const bool Ship::collidesWith(const Ship & otherShip)
 {
     // Get current ship data
     const Engine::Position & position = getPosition();

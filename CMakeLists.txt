@@ -45,6 +45,7 @@ add_executable(battleship
     src/cruiser.cpp
     src/submarine.cpp
     src/destroyer.cpp
+    src/start_button.cpp
     src/engine/configuration.cpp
     src/engine/dimensions.cpp
     src/engine/engine.cpp
@@ -55,6 +56,7 @@ add_executable(battleship
     src/engine/position.cpp
     src/engine/resolution.cpp
     src/engine/resource_manager.cpp
+    src/engine/sprite.cpp
 )
 
 target_include_directories(

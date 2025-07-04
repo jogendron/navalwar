@@ -97,19 +97,16 @@ void Image::draw()
     SDL_Texture * texture = getTexture();
     const Position & position = _position;
 
-    SDL_FRect dst;
-    dst.w = texture->w;
-    dst.h = texture->h;
-    dst.x = position.getX();
-    dst.y = position.getY();
+    SDL_FRect sourceRectangle = getSourceRectangle();
+    SDL_FRect destinationRectangle = getDestinationRectangle();
 
     if (_rotation == 0 || _rotation == 360)
     {
         SDL_RenderTexture(
             _renderer, 
             texture, 
-            NULL, 
-            & dst
+            & sourceRectangle, 
+            & destinationRectangle
         );
     }
     else
@@ -117,12 +114,37 @@ void Image::draw()
         SDL_RenderTextureRotated(
             _renderer, 
             texture, 
-            NULL, 
-            & dst, 
+            & sourceRectangle, 
+            & destinationRectangle, 
             _rotation, 
             & _rotationCenter, 
             SDL_FLIP_NONE
         );
     }
-    
+}
+
+SDL_FRect Image::getSourceRectangle()
+{
+    SDL_Texture * texture = getTexture();
+    SDL_FRect sourceRectangle;
+
+    sourceRectangle.w = texture->w;
+    sourceRectangle.h = texture->h;
+    sourceRectangle.x = 0;
+    sourceRectangle.y = 0;
+
+    return sourceRectangle;
+}
+
+SDL_FRect Image::getDestinationRectangle()
+{
+    SDL_Texture * texture = getTexture();
+    SDL_FRect destinationRectangle;
+
+    destinationRectangle.w = texture->w;
+    destinationRectangle.h = texture->h;
+    destinationRectangle.x = _position.getX();
+    destinationRectangle.y = _position.getY();
+
+    return destinationRectangle;
 }

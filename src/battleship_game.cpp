@@ -8,8 +8,8 @@ BattleshipGame::BattleshipGame()
 {
     Engine::Engine & engine = Engine::Engine::getInstance();
     
-    Engine::Resolution currentResolution = engine.getConfiguration()->getResolution();
     Engine::Resolution defaultResolution(1280, 720);
+    Engine::Resolution currentResolution = engine.getConfiguration()->getResolution();
 
     _background = std::make_unique<Engine::Image>("background.png");
     _playerGrid = std::make_unique<Grid>(Engine::Position(25,25).scale(defaultResolution, currentResolution));
@@ -22,6 +22,13 @@ BattleshipGame::BattleshipGame()
         std::make_unique<Submarine>(Engine::Position(675,300).scale(defaultResolution, currentResolution)),
         std::make_unique<Destroyer>(Engine::Position(675,375).scale(defaultResolution, currentResolution))
     });
+
+    _startButton = std::make_unique<StartButton>(
+        Engine::Position(1100, 625).scale(defaultResolution, currentResolution), 
+        currentResolution
+    );
+
+    _startButton->onClick = std::bind(&BattleshipGame::startGame, this);
 }
 
 BattleshipGame::~BattleshipGame()
@@ -34,6 +41,7 @@ void BattleshipGame::processEvent(const SDL_Event & event)
     {
         case BattleshipGameState::PRE_GAME:
             processShipEvent(event);
+            processStartButtonEvent(event);
             break;
         
         case BattleshipGameState::GAMING:
@@ -50,10 +58,7 @@ void BattleshipGame::update()
     {
         case BattleshipGameState::PRE_GAME:
             updateShips();
-
-            if (allShipsOnGrid())
-                _state = BattleshipGameState::GAMING;
-                
+            updateStartButton();
             break;
         
         case BattleshipGameState::GAMING:
@@ -68,6 +73,9 @@ void BattleshipGame::render()
 {
     _background->draw();
     _playerGrid->draw();
+
+    if (_state == BattleshipGameState::PRE_GAME)
+        _startButton->draw();
 
     if (_state != BattleshipGameState::PRE_GAME)
         _enemyGrid->draw();
@@ -96,6 +104,21 @@ void BattleshipGame::processShipEvent(const SDL_Event & event)
     }
 }
 
+void BattleshipGame::processStartButtonEvent(const SDL_Event & event)
+{
+    switch (event.type)
+    {
+        case SDL_EVENT_MOUSE_MOTION:
+        case SDL_EVENT_MOUSE_BUTTON_DOWN:
+        case SDL_EVENT_MOUSE_BUTTON_UP:   
+            _startButton->processEvent(event);
+            break;
+
+        default:
+            break;
+    }
+}
+
 void BattleshipGame::updateShips()
 {
     std::for_each(_ships.cbegin(), _ships.cend(), [this](const std::unique_ptr<Ship> & ship)
@@ -116,10 +139,25 @@ void BattleshipGame::updateShips()
     });
 }
 
+void BattleshipGame::updateStartButton()
+{
+    _startButton->update();
+
+    if (! _startButton->isEnabled() && allShipsOnGrid())
+        _startButton->enable();
+    else if (_startButton->isEnabled() && ! allShipsOnGrid())
+        _startButton->disable();    
+}
+
 bool BattleshipGame::allShipsOnGrid() const
 {
     return std::all_of(_ships.cbegin(), _ships.cend(), [](const std::unique_ptr<Ship> & ship)
     {
         return ship->isOnGrid();
     });
+}
+
+void BattleshipGame::startGame()
+{
+    _state = BattleshipGameState::GAMING;
 }

@@ -32,7 +32,7 @@ class Ship : public Engine::Entity
         const ShipOrientation & getOrientation() const;
 
         const bool isCollisionCheckRequested() const;
-        const bool collidesWith(const Ship& otherShip);
+        const bool collidesWith(const Ship & otherShip);
         void resetPosition();
 
         const bool isSnapRequested() const;
@@ -43,7 +43,7 @@ class Ship : public Engine::Entity
         void failSnap();
         bool isOnGrid() const;
 
-        void processEvent(const SDL_Event& event);
+        void processEvent(const SDL_Event & event);
         void update();
         void draw();
 

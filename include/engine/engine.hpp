@@ -7,6 +7,7 @@
 #include <SDL3/SDL.h>
 #include <SDL3/SDL_main.h>
 #include <SDL3/SDL_video.h>
+#include <SDL3/SDL_timer.h>
 
 #include "engine/configuration.hpp"
 #include "engine/game.hpp"
@@ -27,6 +28,7 @@ namespace Engine
             SDL_Renderer * getRenderer();
             std::shared_ptr<Configuration> getConfiguration();
             std::shared_ptr<ResourceManager> getResourceManager();
+            Uint64 getTicks();
 
             void run(const std::shared_ptr<Game> game);
 

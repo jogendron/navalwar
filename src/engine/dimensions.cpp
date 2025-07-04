@@ -24,3 +24,11 @@ const int Dimensions::getHeight() const
 {
     return _height;
 }
+
+Dimensions Dimensions::scale(const Resolution& from, const Resolution& to) const
+{
+    return Dimensions(
+        to.getWidth() * _width / from.getWidth(),
+        to.getHeight() * _height / from.getHeight()
+    );
+}

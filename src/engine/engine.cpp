@@ -85,6 +85,11 @@ std::shared_ptr<Engine::ResourceManager> Engine::Engine::getResourceManager()
     return _resourceManager;
 }
 
+Uint64 Engine::Engine::getTicks()
+{
+    return SDL_GetTicks();
+}
+
 void Engine::Engine::run(std::shared_ptr<Game> game)
 {
     bool running = true;
