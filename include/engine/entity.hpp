@@ -13,8 +13,9 @@ namespace Engine
             Entity();
             ~Entity();
 
+            virtual void processEvent(const SDL_Event & event);
             virtual void update();
-            virtual void draw() = 0;
+            virtual void draw();
 
         protected:
             std::shared_ptr<ResourceManager> _resourceManager;

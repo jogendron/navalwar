@@ -1,7 +1,9 @@
 #include "engine/engine.hpp"
-#include "ship.hpp"
+#include "player/human/ship.hpp"
 
 #include <algorithm>
+
+using namespace Player::Human;
 
 Ship::Ship(const std::string & imageName, const Engine::Position & position)
 :   _state (ShipState::IDLE),
@@ -98,8 +100,8 @@ const bool Ship::isSnapRequested() const
 {
     return _snapRequested;
 }
-        
-void Ship::snap(const Engine::Position & position, std::vector<std::reference_wrapper<const Cell>> & cells)
+
+void Ship::snap(const Engine::Position & position, std::vector<std::reference_wrapper<Cell>> & cells)
 {   
     _position = position;
     _snapRequested = false;
@@ -128,6 +130,39 @@ void Ship::failSnap()
 bool Ship::isOnGrid() const
 {
     return ! _cells.empty();
+}
+
+Events::ShotResult Ship::applyShot(const std::string & positionName)
+{
+    Events::ShotResult result = Events::ShotResult::MISS;
+
+    bool hit = false;
+    bool sunk = true;
+
+    for (auto cell : _cells)
+    {
+        if (cell.get().getPositionName() == positionName)
+        {
+            hit = true;
+            cell.get().setState(CellState::HIT);
+        }
+
+        sunk = sunk && (cell.get().getState() == CellState::HIT);
+    }
+
+    if (sunk && hit) // Don't want to announce a sunk ship if it was not hit
+        result = Events::ShotResult::SUNK;
+    else if (hit)
+        result = Events::ShotResult::HIT;
+
+    return result;
+}
+
+bool Ship::isSunk() const
+{
+    return std::all_of(_cells.begin(), _cells.end(), [](const Cell & cell) {
+        return cell.getState() == CellState::HIT;
+    });
 }
 
 void Ship::processEvent(const SDL_Event& event)

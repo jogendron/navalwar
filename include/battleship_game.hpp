@@ -1,18 +1,20 @@
 #ifndef __BATTLESHIP_BATTLESHIP_GAME_HPP
 #define __BATTLESHIP_BATTLESHIP_GAME_HPP
 
-#include <array>
-#include <functional>
 #include <memory>
 
 #include "engine/game.hpp"
-#include "grid.hpp"
-#include "carrier.hpp"
-#include "battleship.hpp"
-#include "cruiser.hpp"
-#include "submarine.hpp"
-#include "destroyer.hpp"
-#include "start_button.hpp"
+#include "engine/eventBus.hpp"
+#include "engine/logger.hpp"
+
+#include "player/player.hpp"
+
+#include "events/player_ready.hpp"
+#include "events/opponent_ready.hpp"
+#include "events/game_started.hpp"
+#include "events/game_over.hpp"
+#include "events/shot_fired.hpp"
+#include "events/shot_result_announced.hpp"
 
 enum BattleshipGameState
 {
@@ -32,21 +34,24 @@ class BattleshipGame : public Engine::Game
         void render();
 
     private:
+        std::shared_ptr<Engine::EventBus> _eventBus;
+        std::shared_ptr<Engine::Logger> _logger;
+        
         BattleshipGameState _state;
+        bool _playerIsReady;
+        bool _opponentIsReady;
+
         std::unique_ptr<Engine::Image> _background;
-        std::unique_ptr<Grid> _playerGrid;
-        std::unique_ptr<Grid> _enemyGrid;
-        std::array<std::unique_ptr<Ship>, 5> _ships;
-        std::unique_ptr<StartButton> _startButton;
 
-        void processShipEvent(const SDL_Event & event);
-        void processStartButtonEvent(const SDL_Event & event);
+        std::unique_ptr<Player::Player> _player;
+        std::unique_ptr<Player::Player> _opponent;
 
-        void updateShips();
-        void updateStartButton();
-
-        bool allShipsOnGrid() const;
-        void startGame();
+        void handlePlayerReady(std::shared_ptr<Events::PlayerReady> event);
+        void handleOpponentReady(std::shared_ptr<Events::OpponentReady> event);
+        void handleGameStarted(std::shared_ptr<Events::GameStarted> event);
+        void handleShotFired(std::shared_ptr<Events::ShotFired> event);
+        void handleShotResultAnnounced(std::shared_ptr<Events::ShotResultAnnounced> event);
+        void handleGameOver(std::shared_ptr<Events::GameOver> event);
 };
 
 #endif

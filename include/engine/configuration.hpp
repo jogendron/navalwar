@@ -15,10 +15,12 @@ namespace Engine
 
             const std::string & getWindowTitle() const;
             const Resolution & getResolution() const;
+            const std::string & getLogLevel() const;
 
         private:
             std::string _windowTitle;
             Resolution _resolution;
+            std::string _logLevel;
     };    
 }
 

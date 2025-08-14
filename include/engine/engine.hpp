@@ -10,7 +10,9 @@
 #include <SDL3/SDL_timer.h>
 
 #include "engine/configuration.hpp"
+#include "engine/eventBus.hpp"
 #include "engine/game.hpp"
+#include "engine/logger.hpp"
 #include "engine/resource_manager.hpp"
 
 namespace Engine
@@ -27,6 +29,8 @@ namespace Engine
             SDL_Window * getWindow();
             SDL_Renderer * getRenderer();
             std::shared_ptr<Configuration> getConfiguration();
+            std::shared_ptr<EventBus> getEventBus();
+            std::shared_ptr<Logger> getLogger();
             std::shared_ptr<ResourceManager> getResourceManager();
             Uint64 getTicks();
 
@@ -38,7 +42,11 @@ namespace Engine
             SDL_Window * _window = 0;
             SDL_Renderer * _renderer = 0;
             std::shared_ptr<Configuration> _configuration;
+            std::shared_ptr<EventBus> _eventBus;
+            std::shared_ptr<Logger> _logger;
             std::shared_ptr<ResourceManager> _resourceManager;
+
+            void setLogLevel(const std::string & logLevel);
     };
 }
 

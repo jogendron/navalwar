@@ -1,44 +1,24 @@
-#include <algorithm>
-#include <vector>
-#include "grid.hpp"
+#include "player/human/human_grid.hpp"
 
-Grid::Grid(const Engine::Position & position)
-:   _position (position), 
-    _gridImage (std::make_unique<Engine::Image>(Engine::Image("grid.png", position)))
-{
-    for (int i = 0; i < 10; i++)
-        for (int j = 0; j < 10; j++)
-            _cells[i][j].setPosition(i, j, _position);
-}
+using namespace Player;
+using namespace Player::Human;
 
-Grid::~Grid()
+HumanGrid::HumanGrid(const Engine::Position & position)
+: Grid(position)
 {
 }
 
-Cell & Grid::getCell(const std::string & positionName)
+HumanGrid::~HumanGrid()
 {
-    if (positionName.length() != 2)
-        throw std::invalid_argument("Position name must be two characters long.");
-
-    char line = positionName[0];
-    char row = positionName[1];
-
-    if (line < 'A' || line > 'J' || row < '0' || row > '9')
-        throw std::out_of_range("Line must be between A and J, row must be between 0 and 9.");
-
-    int lineIndex = line - 'A';
-    int rowIndex = row - '0';
-
-    return _cells[lineIndex][rowIndex];
 }
 
-void Grid::snap(Ship & ship) const
+void HumanGrid::snap(Ship & ship)
 {
     const Engine::Position & gridPosition = _gridImage->getPosition();
     const Engine::Dimensions & gridDimensions = _gridImage->getDimensions();
 
     const Engine::Position & shipPosition = ship.getPosition();
-    const ShipOrientation shipOrientation = ship.getOrientation();
+    const Player::Human::ShipOrientation shipOrientation = ship.getOrientation();
     const Engine::Dimensions & shipDimensions = ship.getDimensions();
 
     const Engine::Dimensions & cellDimensions = _cells[0][0].getDimensions();
@@ -46,7 +26,7 @@ void Grid::snap(Ship & ship) const
     int shipWidth = shipDimensions.getWidth();
     int shipHeight = shipDimensions.getHeight();
 
-    if (shipOrientation == ShipOrientation::VERTICAL)
+    if (shipOrientation == Player::Human::ShipOrientation::VERTICAL)
         std::swap(shipWidth, shipHeight);
 
     if (
@@ -90,21 +70,21 @@ void Grid::snap(Ship & ship) const
 
         if (x > 0 && y > 0)
         {
-            std::vector<std::reference_wrapper<const Cell>> overlappingCells;
+            std::vector<std::reference_wrapper<Cell>> overlappingCells;
             int overlappedCellRowIndex = rowIndex;
             int overlappedCellColumnIndex = columnIndex;
             int overlappingCellsCount = std::max(shipWidth, shipHeight) / cellDimensions.getWidth();
 
-            overlappingCells.push_back(std::cref(_cells[overlappedCellRowIndex][overlappedCellColumnIndex]));
+            overlappingCells.push_back(std::ref(_cells[overlappedCellRowIndex][overlappedCellColumnIndex]));
             for (int i = 1; i < overlappingCellsCount; i++)
             {
-                if (shipOrientation == ShipOrientation::HORIZONTAL)
+                if (shipOrientation == Player::Human::ShipOrientation::HORIZONTAL)
                     overlappedCellColumnIndex++;
                 else
                     overlappedCellRowIndex++;
 
                 overlappingCells.push_back(
-                    std::cref(_cells[overlappedCellRowIndex][overlappedCellColumnIndex])
+                    std::ref(_cells[overlappedCellRowIndex][overlappedCellColumnIndex])
                 );
             }
 
@@ -117,13 +97,4 @@ void Grid::snap(Ship & ship) const
     {
         ship.failSnap();
     }
-}
-
-void Grid::draw()
-{
-    _gridImage->draw();
-    
-    for (int i = 0; i < 10; i++)
-        for (int j = 0; j < 10; j++)
-            _cells[i][j].draw();
 }

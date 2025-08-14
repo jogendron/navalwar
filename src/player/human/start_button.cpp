@@ -1,11 +1,17 @@
-#include "start_button.hpp"
+#include "player/human/start_button.hpp"
 #include "engine/engine.hpp"
+#include "events/player_ready.hpp"
+
+using namespace Player::Human;
 
 StartButton::StartButton(
     const Engine::Position & position,
     const Engine::Resolution & currentResolution
 )
 {
+    Engine::Engine & engine = Engine::Engine::getInstance();
+    _eventBus = engine.getEventBus();
+
     Engine::Resolution defaultResolution(1280, 720);
 
     std::vector<Engine::Position> frames = {
@@ -75,9 +81,8 @@ void StartButton::update()
     if (_clicked)
     {
         _clicked = false;
-        
-        if (onClick)
-            onClick();
+
+        _eventBus->publish(std::make_shared<Events::PlayerReady>());
     }
 }
 

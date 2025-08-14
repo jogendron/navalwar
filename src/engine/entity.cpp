@@ -17,6 +17,14 @@ Entity::~Entity()
 {
 }
 
+void Entity::processEvent(const SDL_Event & event)
+{
+}
+
 void Entity::update()
+{
+}
+
+void Entity::draw()
 {
 }

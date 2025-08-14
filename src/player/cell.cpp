@@ -1,5 +1,7 @@
-#include "cell.hpp"
+#include "player/cell.hpp"
 #include "engine/engine.hpp"
+
+using namespace Player;
 
 Cell::Cell()
 :   _position (Engine::Position(0, 0)),
@@ -25,6 +27,11 @@ const Engine::Position & Cell::getPosition() const
 const Engine::Dimensions & Cell::getDimensions() const
 {
     return _dimensions;
+}
+
+const CellState Cell::getState() const
+{
+    return _state;
 }
 
 void Cell::setState(const CellState& state)
@@ -94,12 +101,12 @@ void Cell::draw()
             SDL_SetRenderDrawColor(_renderer, 0, 0, 0, 64); 
             break;
 
-        case CellState::TOUCHED:
-            SDL_SetRenderDrawColor(_renderer, 255, 0, 0, 128); 
+        case CellState::HIT:
+            SDL_SetRenderDrawColor(_renderer, 255, 0, 0, 192); 
             break;
 
         case CellState::MISSED:
-            SDL_SetRenderDrawColor(_renderer, 255, 255, 255, 128); 
+            SDL_SetRenderDrawColor(_renderer, 255, 255, 255, 192); 
             break;
     }
     

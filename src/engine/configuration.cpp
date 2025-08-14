@@ -30,6 +30,8 @@ Configuration::Configuration(const std::string & path)
         root["window"]["resolution"]["width"].asInt(),
         root["window"]["resolution"]["height"].asInt()
     );
+
+    _logLevel = root["logLevel"].asString();
 }
 
 Configuration::~Configuration()
@@ -44,4 +46,9 @@ const std::string & Configuration::getWindowTitle() const
 const Resolution & Configuration::getResolution() const
 {
     return _resolution;
+}
+
+const std::string & Configuration::getLogLevel() const
+{
+    return _logLevel;
 }

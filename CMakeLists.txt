@@ -37,21 +37,35 @@ endif()
 add_executable(battleship
     src/main.cpp
     src/battleship_game.cpp
-    src/grid.cpp
-    src/cell.cpp
-    src/ship.cpp
-    src/battleship.cpp
-    src/carrier.cpp
-    src/cruiser.cpp
-    src/submarine.cpp
-    src/destroyer.cpp
-    src/start_button.cpp
+    src/player/player.cpp
+    src/player/grid.cpp
+    src/player/cell.cpp
+    src/player/human/ship.cpp
+    src/player/human/battleship.cpp
+    src/player/human/carrier.cpp
+    src/player/human/cruiser.cpp
+    src/player/human/submarine.cpp
+    src/player/human/destroyer.cpp
+    src/player/human/start_button.cpp
+    src/player/human/human_grid.cpp
+    src/player/human/human_player.cpp
+    src/player/ai/ai_opponent.cpp
+    src/player/ai/ai_easy_opponent.cpp
+    src/events/game_over.cpp
+    src/events/game_started.cpp
+    src/events/opponent_ready.cpp
+    src/events/player_ready.cpp
+    src/events/shot_fired.cpp
+    src/events/shot_result_announced.cpp
     src/engine/configuration.cpp
     src/engine/dimensions.cpp
     src/engine/engine.cpp
     src/engine/entity.cpp
+    src/engine/event.cpp
+    src/engine/eventBus.cpp
     src/engine/game.cpp
     src/engine/image.cpp
+    src/engine/logger.cpp
     src/engine/path_factory.cpp
     src/engine/position.cpp
     src/engine/resolution.cpp

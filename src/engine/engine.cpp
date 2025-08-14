@@ -1,11 +1,16 @@
 #include "engine/engine.hpp"
 #include "engine/path_factory.hpp"
 
+#include <iostream>
+#include <map>
+
 Engine::Engine::Engine()
 {
     _configuration = std::make_shared<Configuration>(
         "../etc/battleship/config.json"
     );
+
+    _eventBus = std::make_shared<EventBus>();
 
     _window = SDL_CreateWindow(
         _configuration->getWindowTitle().c_str(),
@@ -31,6 +36,9 @@ Engine::Engine::Engine()
     SDL_SetRenderVSync(_renderer, 1);
     SDL_SetRenderDrawBlendMode(_renderer, SDL_BLENDMODE_BLEND); // Enable alpha blending
 
+    setLogLevel(_configuration->getLogLevel());
+
+    _logger = std::make_shared<Logger>();
     _resourceManager = std::make_shared<ResourceManager>(_renderer);
 }
 
@@ -80,6 +88,16 @@ std::shared_ptr<Engine::Configuration> Engine::Engine::getConfiguration()
     return _configuration;
 }
 
+std::shared_ptr<Engine::EventBus> Engine::Engine::getEventBus()
+{
+    return _eventBus;
+}
+
+std::shared_ptr<Engine::Logger> Engine::Engine::getLogger()
+{
+    return _logger;
+}
+
 std::shared_ptr<Engine::ResourceManager> Engine::Engine::getResourceManager()
 {
     return _resourceManager;
@@ -115,4 +133,25 @@ void Engine::Engine::run(std::shared_ptr<Game> game)
         game->render();
         SDL_RenderPresent(Engine::Engine::getInstance().getRenderer());
     }
+}
+
+void Engine::Engine::setLogLevel(const std::string & logLevel)
+{
+    std::map<std::string, SDL_LogPriority> logLevels = {
+        {"Critical", SDL_LOG_PRIORITY_CRITICAL},
+        {"Error", SDL_LOG_PRIORITY_ERROR},
+        {"Warning", SDL_LOG_PRIORITY_WARN},
+        {"Information", SDL_LOG_PRIORITY_INFO},
+        {"Debug", SDL_LOG_PRIORITY_DEBUG}
+    };
+
+    SDL_LogPriority sdlLogLevel = SDL_LOG_PRIORITY_ERROR;
+    auto it = logLevels.find(logLevel);
+
+    if (it != logLevels.end())
+        sdlLogLevel = it->second;
+    else
+        std::cerr << "Unknown log level: " << sdlLogLevel << ". Defaulting to Error." << std::endl;
+    
+    SDL_SetLogPriority(SDL_LOG_CATEGORY_CUSTOM, sdlLogLevel);
 }
