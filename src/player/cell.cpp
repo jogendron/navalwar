@@ -111,4 +111,5 @@ void Cell::draw()
     }
     
     SDL_RenderFillRect(_renderer, &rect);
+    SDL_SetRenderDrawColor(_renderer, 0, 0, 0, 255); 
 }

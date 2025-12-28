@@ -24,7 +24,7 @@ Engine::Engine::Engine(const std::string & gameName)
         _configuration->getWindowTitle().c_str(),
         _configuration->getResolution().getWidth(),
         _configuration->getResolution().getHeight(),
-        SDL_WINDOW_OPENGL
+        SDL_WINDOW_OPENGL | SDL_WINDOW_RESIZABLE
     );
 
     if (! _window)
@@ -41,6 +41,12 @@ Engine::Engine::Engine(const std::string & gameName)
         throw std::runtime_error("Cannot create SDL window");
     }
 
+    SDL_SetRenderLogicalPresentation(
+        _renderer,
+        _configuration->getResolution().getWidth(),
+        _configuration->getResolution().getHeight(),
+        SDL_LOGICAL_PRESENTATION_LETTERBOX
+    ); // Enable content to be stretched with letterboxing
     SDL_SetRenderVSync(_renderer, 1);
     SDL_SetRenderDrawBlendMode(_renderer, SDL_BLENDMODE_BLEND); // Enable alpha blending
 
@@ -144,9 +150,44 @@ void Engine::Engine::run(std::shared_ptr<Game> game)
         while (SDL_PollEvent(&event))
         {
             if (event.type == SDL_EVENT_QUIT)
+            {
                 running = false;
+            }
             else
+            {
+                // Convert mouse coordinates from window to logical coordinates
+                if (
+                    event.type == SDL_EVENT_MOUSE_BUTTON_DOWN 
+                    || event.type == SDL_EVENT_MOUSE_BUTTON_UP
+                )
+                {
+                    float logicalX, logicalY;
+                    SDL_RenderCoordinatesFromWindow(
+                        _renderer, 
+                        event.button.x, 
+                        event.button.y, 
+                        &logicalX, 
+                        &logicalY
+                    );
+                    event.button.x = logicalX;
+                    event.button.y = logicalY;
+                }
+                else if (event.type == SDL_EVENT_MOUSE_MOTION)
+                {
+                    float logicalX, logicalY;
+                    SDL_RenderCoordinatesFromWindow(
+                        _renderer, 
+                        event.motion.x, 
+                        event.motion.y, 
+                        &logicalX, 
+                        &logicalY
+                    );
+                    event.motion.x = logicalX;
+                    event.motion.y = logicalY;
+                }
+
                 game->processEvent(event);
+            }
         }
 
         // Update

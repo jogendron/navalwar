@@ -2,8 +2,8 @@
     "window": {
         "title": "Battleship",
         "resolution": {
-            "width": 1280,
-            "height": 720
+            "width": 3840,
+            "height": 2160
         }
     },
     "locale": "auto",
