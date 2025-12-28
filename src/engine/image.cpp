@@ -18,7 +18,7 @@ Image::Image(const std::string & fileName)
     Resolution res = engine.getConfiguration()->getResolution();
 
     std::ostringstream oss;
-    oss << "../share/battleship/images/";
+    oss << "../share/" << engine.getConfiguration()->getGameName() << "/images/";
     oss << res.getWidth() << "x" << res.getHeight() << "/";
     oss << fileName;
 
@@ -26,6 +26,8 @@ Image::Image(const std::string & fileName)
 
     _rotationCenter.x = 0;
     _rotationCenter.y = 0;
+
+    _texture = _resourceManager->getTexture(_path);
 }
 
 Image::Image(
@@ -37,6 +39,23 @@ Image::Image(
     _position = position;
 }
 
+Image::Image(std::shared_ptr<SDL_Texture> texture)
+: _position (Position(0,0)), 
+  _dimensions (Dimensions(0,0)),
+  _rotation (0)
+{
+    Engine& engine = Engine::getInstance();
+    
+    _resourceManager = engine.getResourceManager();
+    _window = engine.getWindow();
+    _renderer = engine.getRenderer();
+
+    _rotationCenter.x = 0;
+    _rotationCenter.y = 0;
+
+    _texture = texture;
+}
+
 Image::~Image()
 {
 }
@@ -44,14 +63,6 @@ Image::~Image()
 Position & Image::getPosition()
 {
     return _position;
-}
-
-SDL_Texture * Image::getTexture()
-{
-    if (! _texture)
-        _texture = _resourceManager->getTexture(_path);
-
-    return _texture.get();
 }
 
 const Dimensions & Image::getDimensions()
@@ -94,7 +105,6 @@ void Image::setRotationCenter(SDL_FPoint center)
 
 void Image::draw()
 {
-    SDL_Texture * texture = getTexture();
     const Position & position = _position;
 
     SDL_FRect sourceRectangle = getSourceRectangle();
@@ -104,7 +114,7 @@ void Image::draw()
     {
         SDL_RenderTexture(
             _renderer, 
-            texture, 
+            _texture.get(), 
             & sourceRectangle, 
             & destinationRectangle
         );
@@ -113,7 +123,7 @@ void Image::draw()
     {
         SDL_RenderTextureRotated(
             _renderer, 
-            texture, 
+            _texture.get(), 
             & sourceRectangle, 
             & destinationRectangle, 
             _rotation, 
@@ -125,11 +135,10 @@ void Image::draw()
 
 SDL_FRect Image::getSourceRectangle()
 {
-    SDL_Texture * texture = getTexture();
     SDL_FRect sourceRectangle;
 
-    sourceRectangle.w = texture->w;
-    sourceRectangle.h = texture->h;
+    sourceRectangle.w = _texture->w;
+    sourceRectangle.h = _texture->h;
     sourceRectangle.x = 0;
     sourceRectangle.y = 0;
 
@@ -138,11 +147,10 @@ SDL_FRect Image::getSourceRectangle()
 
 SDL_FRect Image::getDestinationRectangle()
 {
-    SDL_Texture * texture = getTexture();
     SDL_FRect destinationRectangle;
 
-    destinationRectangle.w = texture->w;
-    destinationRectangle.h = texture->h;
+    destinationRectangle.w = _texture->w;
+    destinationRectangle.h = _texture->h;
     destinationRectangle.x = _position.getX();
     destinationRectangle.y = _position.getY();
 

@@ -37,3 +37,39 @@ std::shared_ptr<SDL_Texture> ResourceManager::getTexture(const std::string & pat
 
     return texture;
 }
+
+std::shared_ptr<TTF_Font> ResourceManager::getFont(const std::string & path, const int & size)
+{
+    std::shared_ptr<TTF_Font> font = NULL;
+    std::string key = path + "-" + std::to_string(size);
+    std::map<std::string, std::shared_ptr<TTF_Font>>::iterator it = _fonts.find(key);
+    
+    if (it == _fonts.end())
+    {
+        font = std::shared_ptr<TTF_Font>(
+            TTF_OpenFont(PathFactory::createPath(path).c_str(), size), 
+            [](TTF_Font * ptr) {
+                TTF_CloseFont(ptr);
+            }
+        );
+
+        if (! font)
+        {
+            
+        }
+
+        _fonts.insert({key, font});
+    }
+    else
+    {
+        font = it->second;
+    }
+
+    return font;
+}
+
+void ResourceManager::clear()
+{
+    _textures.clear();
+    _fonts.clear();
+}

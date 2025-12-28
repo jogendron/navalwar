@@ -11,7 +11,7 @@ int main(int argc, char * argv[])
 
     try
     {
-        Engine::Engine::init(argc, argv);
+        Engine::Engine::init(argc, argv, "battleship");
         game = std::make_shared<BattleshipGame>();
         
         Engine::Engine::getInstance().run(game);
@@ -22,6 +22,5 @@ int main(int argc, char * argv[])
         std::cerr << "An error occurred: " << e.what() << std::endl;
     }
     
-    Engine::Engine::quit();
     return rv;
 }

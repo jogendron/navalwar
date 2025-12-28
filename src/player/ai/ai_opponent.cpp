@@ -9,6 +9,9 @@ using namespace Player::AI;
 AIOpponent::AIOpponent() 
 :   Player()
 {
+    _playerGrid = std::make_unique<Grid>(Engine::Position(25,25));
+    _opponentGrid = std::make_unique<Grid>(Engine::Position(675,25));
+
     _eventBus->registerHandler<Events::GameStarted>(std::bind(
         &AIOpponent::handleGameStarted, this, std::placeholders::_1
     ));

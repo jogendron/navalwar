@@ -139,12 +139,12 @@ void BattleshipGame::handleShotResultAnnounced(std::shared_ptr<Events::ShotResul
             switch (event->getInitiator())
             {
                 case PlayerType::PLAYER:
-                    gameOver = _player->getRemainingShipsCount() == 0;
+                    gameOver = _player->getRemainingShipsCount() <= 0;
                     winner = PlayerType::OPPONENT;
                     break;
 
                 case PlayerType::OPPONENT:
-                    gameOver = _opponent->getRemainingShipsCount() == 0;
+                    gameOver = _opponent->getRemainingShipsCount() <= 0;
                     winner = PlayerType::PLAYER;
                     break;
             }

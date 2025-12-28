@@ -12,6 +12,7 @@
 #include "engine/configuration.hpp"
 #include "engine/eventBus.hpp"
 #include "engine/game.hpp"
+#include "engine/localization.hpp"
 #include "engine/logger.hpp"
 #include "engine/resource_manager.hpp"
 
@@ -22,8 +23,7 @@ namespace Engine
         public:
             ~Engine();
 
-            static void init(int argc, char * argv[]);
-            static void quit();
+            static void init(int argc, char * argv[], const std::string & gameName);
             static Engine & getInstance();
 
             SDL_Window * getWindow();
@@ -32,12 +32,13 @@ namespace Engine
             std::shared_ptr<EventBus> getEventBus();
             std::shared_ptr<Logger> getLogger();
             std::shared_ptr<ResourceManager> getResourceManager();
+            std::shared_ptr<Localization> getLocalization() const;
             Uint64 getTicks();
 
             void run(const std::shared_ptr<Game> game);
 
         private:
-            Engine();
+            Engine(const std::string & gameName);
 
             SDL_Window * _window = 0;
             SDL_Renderer * _renderer = 0;
@@ -45,6 +46,7 @@ namespace Engine
             std::shared_ptr<EventBus> _eventBus;
             std::shared_ptr<Logger> _logger;
             std::shared_ptr<ResourceManager> _resourceManager;
+            std::shared_ptr<Localization> _localization;
 
             void setLogLevel(const std::string & logLevel);
     };

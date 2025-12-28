@@ -4,6 +4,7 @@
 #include "player/player.hpp"
 #include "player/human/human_grid.hpp"
 #include "player/human/start_button.hpp"
+#include "player/human/stat_counter.hpp"
 #include "events/game_started.hpp"
 #include "events/shot_fired.hpp"
 #include "events/shot_result_announced.hpp"
@@ -21,9 +22,11 @@ namespace Player::Human
             void draw() override;
 
         private:
-            HumanGrid * _humanPlayerGrid;
+            std::unique_ptr<HumanGrid> _playerGrid;
+            std::unique_ptr<Grid> _opponentGrid;
             std::array<std::shared_ptr<Ship>, 5> _ships;
             std::unique_ptr<StartButton> _startButton;
+            std::unique_ptr<StatCounter> _statCounter;
 
             void processShipEvent(const SDL_Event & event);
             void processStartButtonEvent(const SDL_Event & event);

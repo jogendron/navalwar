@@ -25,7 +25,6 @@ namespace Player
     {
         public:
             Player();
-            Player(std::unique_ptr<Grid> playerGrid);
             virtual ~Player();
 
             PlayerState getState() const;
@@ -37,8 +36,6 @@ namespace Player
 
             PlayerState _state;     
             int _remainingShipsCount;
-            std::unique_ptr<Grid> _playerGrid;
-            std::unique_ptr<Grid> _opponentGrid;
 
             Events::ShotResultAnnounced _lastShotResult;
             bool _needToAnnounceShotResult = false;

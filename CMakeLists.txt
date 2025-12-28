@@ -19,6 +19,18 @@ if (NOT SDL3_IMAGE_FOUND)
     endif()
 endif()
 
+# Find sdl3_ttf
+find_package(SDL3_ttf QUIET)
+
+if (NOT SDL3_ttf_FOUND)
+    find_package(SDL3_ttf QUIET)
+    if (SDL3_ttf_FOUND)
+        set(SDL3_ttf_FOUND TRUE)
+        set(SDL3_ttf_INCLUDE_DIRS ${SDL3_ttf_INCLUDE_DIRS})
+        set(SDL3_ttf_LIBRARIES ${SDL3_ttf_LIBRARIES})
+    endif()
+endif()
+
 if (NOT SDL3_IMAGE_FOUND)
     message(FATAL_ERROR "SDL3_image not found! Make sure it is installed.")
 endif()
@@ -47,6 +59,7 @@ add_executable(battleship
     src/player/human/submarine.cpp
     src/player/human/destroyer.cpp
     src/player/human/start_button.cpp
+    src/player/human/stat_counter.cpp
     src/player/human/human_grid.cpp
     src/player/human/human_player.cpp
     src/player/ai/ai_opponent.cpp
@@ -63,8 +76,10 @@ add_executable(battleship
     src/engine/entity.cpp
     src/engine/event.cpp
     src/engine/eventBus.cpp
+    src/engine/font.cpp
     src/engine/game.cpp
     src/engine/image.cpp
+    src/engine/localization.cpp
     src/engine/logger.cpp
     src/engine/path_factory.cpp
     src/engine/position.cpp
@@ -86,5 +101,6 @@ target_link_libraries(
     PRIVATE 
     SDL3::SDL3 
     SDL3_image::SDL3_image 
+    SDL3_ttf::SDL3_ttf
     ${JSONCPP_LIBRARIES}
 )

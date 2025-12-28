@@ -1,14 +1,22 @@
 #include "engine/engine.hpp"
 #include "engine/path_factory.hpp"
-
 #include <iostream>
+#include <sstream>
 #include <map>
 
-Engine::Engine::Engine()
+static std::string storedGameName = "";
+
+Engine::Engine::Engine(const std::string & gameName) 
 {
-    _configuration = std::make_shared<Configuration>(
-        "../etc/battleship/config.json"
-    );
+    if (gameName.empty())
+        throw std::runtime_error("Game name cannot be empty");
+
+    std::ostringstream oss;
+    oss << "../etc/" << gameName << "/config.json";
+    _configuration = std::make_shared<Configuration>(gameName);
+
+    _logger = std::make_shared<Logger>();
+    setLogLevel(_configuration->getLogLevel());
 
     _eventBus = std::make_shared<EventBus>();
 
@@ -36,22 +44,30 @@ Engine::Engine::Engine()
     SDL_SetRenderVSync(_renderer, 1);
     SDL_SetRenderDrawBlendMode(_renderer, SDL_BLENDMODE_BLEND); // Enable alpha blending
 
-    setLogLevel(_configuration->getLogLevel());
-
-    _logger = std::make_shared<Logger>();
     _resourceManager = std::make_shared<ResourceManager>(_renderer);
+
+    _localization = std::make_shared<Localization>(
+        _logger,
+        gameName,
+        _configuration->getLocale()
+    );
 }
 
 Engine::Engine::~Engine()
 {
+    _resourceManager->clear();
+
     if (_renderer)
         SDL_DestroyRenderer(_renderer);
 
     if (_window)
         SDL_DestroyWindow(_window);
+
+    TTF_Quit();
+    SDL_Quit();
 }
 
-void Engine::Engine::init(int argc, char * argv[])
+void Engine::Engine::init(int argc, char * argv[], const std::string & gameName)
 {
     PathFactory::init(std::string(argv[0]));
 
@@ -60,16 +76,19 @@ void Engine::Engine::init(int argc, char * argv[])
         SDL_LogError(SDL_LOG_CATEGORY_ERROR, "Cannot initialize SDL: %s\n", SDL_GetError());
         throw std::runtime_error("Cannot initialize SDL");
     }
-}
 
-void Engine::Engine::quit()
-{
-    SDL_Quit();
+    if (! TTF_Init())
+    {
+        SDL_LogError(SDL_LOG_CATEGORY_ERROR, "Cannot initialize SDL_TTF: %s\n", SDL_GetError());
+        throw std::runtime_error("Cannot initialize SDL_TTF");
+    }
+
+    storedGameName = gameName;
 }
 
 Engine::Engine & Engine::Engine::getInstance()
 {
-    static Engine instance;
+    static Engine instance(storedGameName);
     return instance;
 }
 
@@ -101,6 +120,11 @@ std::shared_ptr<Engine::Logger> Engine::Engine::getLogger()
 std::shared_ptr<Engine::ResourceManager> Engine::Engine::getResourceManager()
 {
     return _resourceManager;
+}
+
+std::shared_ptr<Engine::Localization> Engine::Engine::getLocalization() const
+{
+    return _localization;
 }
 
 Uint64 Engine::Engine::getTicks()

@@ -20,10 +20,10 @@ namespace Engine
                 const std::string & filename, 
                 const Position & position
             );
+            Image(std::shared_ptr<SDL_Texture> texture);
             ~Image();
 
             Position & getPosition();
-            SDL_Texture * getTexture();
             const Dimensions & getDimensions();
             const float & getRotation() const;
             const SDL_FPoint & getRotationCenter() const;
@@ -48,9 +48,7 @@ namespace Engine
         private:
             SDL_Window * _window;
             SDL_Renderer * _renderer;
-            std::shared_ptr<SDL_Texture> _texture = NULL;
-
-            
+            std::shared_ptr<SDL_Texture> _texture = NULL;            
     };
 }
 

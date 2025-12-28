@@ -10,7 +10,7 @@ using namespace Player;
 using namespace Player::Human;
 
 HumanPlayer::HumanPlayer()
-:   Player::Player(nullptr)
+:   Player::Player()
 {
     Engine::Engine & engine = Engine::Engine::getInstance();
     
@@ -18,10 +18,15 @@ HumanPlayer::HumanPlayer()
     Engine::Resolution currentResolution = engine.getConfiguration()->getResolution();
 
     _playerGrid = std::make_unique<HumanGrid>(Engine::Position(25,25).scale(defaultResolution, currentResolution));
-    _humanPlayerGrid = static_cast<HumanGrid *>(_playerGrid.get());
+    _opponentGrid = std::make_unique<Grid>(Engine::Position(675,25).scale(defaultResolution, currentResolution));
 
     _startButton = std::make_unique<StartButton>(
         Engine::Position(1100, 625).scale(defaultResolution, currentResolution), 
+        currentResolution
+    );
+
+    _statCounter = std::make_unique<StatCounter>(
+        Engine::Position(74, 610).scale(defaultResolution, currentResolution),
         currentResolution
     );
 
@@ -84,6 +89,7 @@ void HumanPlayer::update()
             break;
 
         case PlayerState::READY_TO_PLAY:
+            _statCounter->update();
             break;
 
         case PlayerState::DEFENDING:
@@ -93,9 +99,15 @@ void HumanPlayer::update()
                 _needToAnnounceShotResult = false;
                 _state = PlayerState::ATTACKING;
             }
+            _statCounter->update();
             break;
 
         case PlayerState::ATTACKING:
+            _statCounter->update();
+            break;
+
+        case PlayerState::GAME_OVER:
+            _statCounter->update();
             break;
 
         default:
@@ -111,7 +123,10 @@ void HumanPlayer::draw()
         _startButton->draw();
 
     if (_state != PlayerState::PLACING_SHIPS)
+    {
         _opponentGrid->draw();
+        _statCounter->draw();
+    }
     
     std::for_each(_ships.cbegin(), _ships.cend(), [](const std::shared_ptr<Ship> & ship)
     {
@@ -183,7 +198,7 @@ void HumanPlayer::updateShips()
         ship->update();
 
         if (ship->isSnapRequested())
-            _humanPlayerGrid->snap(*ship);
+            _playerGrid->snap(*ship);
 
         if (ship->isCollisionCheckRequested())
         {

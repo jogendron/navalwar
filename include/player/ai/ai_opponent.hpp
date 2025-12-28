@@ -24,6 +24,9 @@ namespace Player::AI
             void update() override;
 
         protected:
+            std::unique_ptr<Grid> _playerGrid;
+            std::unique_ptr<Grid> _opponentGrid;
+            
             std::vector<std::reference_wrapper<Cell>> _carrier;
             std::vector<std::reference_wrapper<Cell>> _battleship;
             std::vector<std::reference_wrapper<Cell>> _cruiser;

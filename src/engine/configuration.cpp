@@ -2,15 +2,24 @@
 #include "engine/path_factory.hpp"
 
 #include <fstream>
+#include <sstream>
 #include <vector>
 #include <json/json.h>
 
 using namespace Engine;
 
-Configuration::Configuration(const std::string & path)
+Configuration::Configuration(
+    const std::string & gameName
+)
+:   _gameName(gameName)
 {
+    std::ostringstream oss;
+    oss << "../etc/" << gameName << "/config.json";
+
+    std::string configPath = oss.str();
+
     std::ifstream stream(
-        PathFactory::createPath(path).c_str(),
+        PathFactory::createPath(configPath).c_str(),
         std::ios::in | std::ios::binary
     );
     
@@ -32,10 +41,17 @@ Configuration::Configuration(const std::string & path)
     );
 
     _logLevel = root["logLevel"].asString();
+    
+    _locale = root["locale"].asString();
 }
 
 Configuration::~Configuration()
 {
+}
+
+const std::string & Configuration::getGameName() const
+{
+    return _gameName;
 }
 
 const std::string & Configuration::getWindowTitle() const
@@ -51,4 +67,9 @@ const Resolution & Configuration::getResolution() const
 const std::string & Configuration::getLogLevel() const
 {
     return _logLevel;
+}
+
+const std::string & Configuration::getLocale() const
+{
+    return _locale;
 }
