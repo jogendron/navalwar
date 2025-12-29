@@ -69,10 +69,7 @@ void StatCounter::update()
     {
         const Engine::Position position = _playerText->getPosition();
 
-        _playerText = _font->createImage(
-            "Ships left : " + std::to_string(_playerShipsLeft),
-            SDL_Color{255, 255, 255, 255}
-        );
+        _playerText = createShipsLeftText(_playerShipsLeft);
         _playerText->setPosition(position);
 
         _playerChanged = false;

@@ -22,7 +22,7 @@ namespace Engine
             const std::string getTranslation(const std::string & key) const;
 
         private:
-            const std::string DEFAULT_LOCALE = "en";
+            const std::string DEFAULT_LOCALE = "en_CA.UTF-8";
 
             std::shared_ptr<Logger> _logger;
             std::string _locale;
