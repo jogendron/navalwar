@@ -1,4 +1,10 @@
 {
     "start-button": "Démarrer",
-    "stat-counter.ships-left": "Bateaux restants : "
+    "ship-counter.ships-left": "Bateaux restants : ",
+    "game-summary.victory": "Victoire !",
+    "game-summary.defeat": "Défaite !",
+    "game-summary.hits": "Tirs réussis : ",
+    "game-summary.misses": "Tirs ratés : ",
+    "game-summary.precision": "Précision : ",
+    "new-game-button": "Nouvelle Partie"
 }

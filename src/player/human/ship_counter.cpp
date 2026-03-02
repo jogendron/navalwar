@@ -1,4 +1,4 @@
-#include "player/human/stat_counter.hpp"
+#include "player/human/ship_counter.hpp"
 #include "engine/engine.hpp"
 #include "engine/resolution.hpp"
 
@@ -6,7 +6,7 @@
 
 using namespace Player::Human;
 
-StatCounter::StatCounter(
+ShipCounter::ShipCounter(
     const Engine::Position & position,
     const Engine::Resolution & currentResolution
 )
@@ -55,15 +55,15 @@ StatCounter::StatCounter(
     );
 
     _eventBus->registerHandler<Events::ShotResultAnnounced>(std::bind(
-        &StatCounter::handleShotResultAnnounced, this, std::placeholders::_1
+        &ShipCounter::handleShotResultAnnounced, this, std::placeholders::_1
     ));
 }
 
-StatCounter::~StatCounter()
+ShipCounter::~ShipCounter()
 {
 }
 
-void StatCounter::update()
+void ShipCounter::update()
 {
     if (_playerChanged)
     {
@@ -86,7 +86,7 @@ void StatCounter::update()
     }
 }
 
-void StatCounter::draw()
+void ShipCounter::draw()
 {
     _playerPanelBackground->draw();
     _playerText->draw();
@@ -95,10 +95,10 @@ void StatCounter::draw()
     _opponentText->draw();
 }
 
-std::shared_ptr<Engine::Image> StatCounter::createShipsLeftText(int shipsLeft) const
+std::shared_ptr<Engine::Image> ShipCounter::createShipsLeftText(int shipsLeft) const
 {
     std::ostringstream oss;
-    oss << _localization->getTranslation("stat-counter.ships-left") << shipsLeft;
+    oss << _localization->getTranslation("ship-counter.ships-left") << shipsLeft;
 
     return _font->createImage(
         oss.str(),
@@ -106,7 +106,7 @@ std::shared_ptr<Engine::Image> StatCounter::createShipsLeftText(int shipsLeft) c
     );
 }
 
-void StatCounter::handleShotResultAnnounced(std::shared_ptr<Events::ShotResultAnnounced> event)
+void ShipCounter::handleShotResultAnnounced(std::shared_ptr<Events::ShotResultAnnounced> event)
 {
     if (event->getShotResult() == Events::ShotResult::SUNK)
     {

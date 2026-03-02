@@ -36,3 +36,9 @@ void Engine::EventBus::processEvents()
 
     _events.clear();
 }
+
+void Engine::EventBus::reset()
+{
+    _handlers.clear();
+    _events.clear();
+}

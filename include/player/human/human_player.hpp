@@ -4,7 +4,8 @@
 #include "player/player.hpp"
 #include "player/human/human_grid.hpp"
 #include "player/human/start_button.hpp"
-#include "player/human/stat_counter.hpp"
+#include "player/human/ship_counter.hpp"
+#include "player/human/game_summary.hpp"
 #include "events/game_started.hpp"
 #include "events/shot_fired.hpp"
 #include "events/shot_result_announced.hpp"
@@ -26,8 +27,8 @@ namespace Player::Human
             std::unique_ptr<Grid> _opponentGrid;
             std::array<std::shared_ptr<Ship>, 5> _ships;
             std::unique_ptr<StartButton> _startButton;
-            std::unique_ptr<StatCounter> _statCounter;
-
+            std::unique_ptr<ShipCounter> _shipCounter;
+            std::unique_ptr<GameSummary> _gameSummary;
             void processShipEvent(const SDL_Event & event);
             void processStartButtonEvent(const SDL_Event & event);
             void processAttackEvents(const SDL_Event & event);

@@ -15,6 +15,7 @@
 #include "events/game_over.hpp"
 #include "events/shot_fired.hpp"
 #include "events/shot_result_announced.hpp"
+#include "events/new_game.hpp"
 
 enum BattleshipGameState
 {
@@ -40,6 +41,7 @@ class BattleshipGame : public Engine::Game
         BattleshipGameState _state;
         bool _playerIsReady;
         bool _opponentIsReady;
+        bool _newGameRequested;
 
         std::unique_ptr<Engine::Image> _background;
 
@@ -52,6 +54,9 @@ class BattleshipGame : public Engine::Game
         void handleShotFired(std::shared_ptr<Events::ShotFired> event);
         void handleShotResultAnnounced(std::shared_ptr<Events::ShotResultAnnounced> event);
         void handleGameOver(std::shared_ptr<Events::GameOver> event);
+        void handleNewGame(std::shared_ptr<Events::NewGame> event);
+
+        void registerEventHandlers();
 };
 
 #endif

@@ -1,4 +1,10 @@
 {
     "start-button": "Start",
-    "stat-counter.ships-left": "Ships Left : "
+    "ship-counter.ships-left": "Ships Left : ",
+    "game-summary.victory": "Victory !",
+    "game-summary.defeat": "Defeat !",
+    "game-summary.hits": "Hits : ",
+    "game-summary.misses": "Misses : ",
+    "game-summary.precision": "Precision : ",
+    "new-game-button": "New Game"
 }

@@ -59,9 +59,11 @@ add_executable(battleship
     src/player/human/submarine.cpp
     src/player/human/destroyer.cpp
     src/player/human/start_button.cpp
-    src/player/human/stat_counter.cpp
+    src/player/human/ship_counter.cpp
     src/player/human/human_grid.cpp
     src/player/human/human_player.cpp
+    src/player/human/game_summary.cpp
+    src/player/human/new_game_button.cpp
     src/player/ai/ai_opponent.cpp
     src/player/ai/ai_easy_opponent.cpp
     src/events/game_over.cpp
@@ -70,6 +72,7 @@ add_executable(battleship
     src/events/player_ready.cpp
     src/events/shot_fired.cpp
     src/events/shot_result_announced.cpp
+    src/events/new_game.cpp
     src/engine/configuration.cpp
     src/engine/dimensions.cpp
     src/engine/engine.cpp

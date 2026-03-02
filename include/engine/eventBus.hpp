@@ -25,6 +25,8 @@ namespace Engine
 
             void processEvents();
 
+            void reset();
+
         private:
             std::map<std::type_index, std::vector<std::function<void(std::shared_ptr<Event>)>>> _handlers;
             std::list<std::shared_ptr<Event>> _events;

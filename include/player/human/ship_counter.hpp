@@ -13,14 +13,14 @@
 
 namespace Player::Human
 {
-    class StatCounter : public Engine::Entity
+    class ShipCounter : public Engine::Entity
     {
         public:
-            StatCounter(
+            ShipCounter(
                 const Engine::Position & position,
                 const Engine::Resolution & currentResolution
             );
-            ~StatCounter();
+            ~ShipCounter();
 
             void update();
             void draw();

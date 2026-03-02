@@ -11,7 +11,8 @@ BattleshipGame::BattleshipGame()
 :   Game(), 
     _state (BattleshipGameState::PRE_GAME),
     _playerIsReady(false),
-    _opponentIsReady(false)
+    _opponentIsReady(false),
+    _newGameRequested(false)
 {
     Engine::Engine & engine = Engine::Engine::getInstance();
 
@@ -22,29 +23,7 @@ BattleshipGame::BattleshipGame()
     _player = std::make_unique<Player::Human::HumanPlayer>();
     _opponent = std::make_unique<Player::AI::AIEasyOpponent>();
 
-    _eventBus->registerHandler<Events::PlayerReady>(std::bind(
-        &BattleshipGame::handlePlayerReady, this, std::placeholders::_1
-    ));
-
-    _eventBus->registerHandler<Events::OpponentReady>(std::bind(
-        &BattleshipGame::handleOpponentReady, this, std::placeholders::_1
-    ));
-
-    _eventBus->registerHandler<Events::GameStarted>(std::bind(
-        &BattleshipGame::handleGameStarted, this, std::placeholders::_1
-    ));
-
-    _eventBus->registerHandler<Events::ShotFired>(std::bind(
-        &BattleshipGame::handleShotFired, this, std::placeholders::_1
-    ));
-
-    _eventBus->registerHandler<Events::ShotResultAnnounced>(std::bind(
-        &BattleshipGame::handleShotResultAnnounced, this, std::placeholders::_1
-    ));
-
-    _eventBus->registerHandler<Events::GameOver>(std::bind(
-        &BattleshipGame::handleGameOver, this, std::placeholders::_1
-    ));
+    registerEventHandlers();
 }
 
 BattleshipGame::~BattleshipGame()
@@ -81,6 +60,19 @@ void BattleshipGame::update()
             break;
 
         case BattleshipGameState::POST_GAME:
+            if (_newGameRequested)
+            {
+                _eventBus->reset();
+
+                _state = BattleshipGameState::PRE_GAME;
+                _playerIsReady = false;
+                _opponentIsReady = false;
+                _newGameRequested = false;
+                _player = std::make_unique<Player::Human::HumanPlayer>();
+                _opponent = std::make_unique<Player::AI::AIEasyOpponent>();
+
+                registerEventHandlers();
+            }
             break;
     }
 }
@@ -165,4 +157,41 @@ void BattleshipGame::handleGameOver(std::shared_ptr<Events::GameOver> event)
     _logger->logInformation("Game over. " + winner + " wins!");
 
     _state = BattleshipGameState::POST_GAME;
+}
+
+void BattleshipGame::handleNewGame(std::shared_ptr<Events::NewGame> event)
+{
+    _logger->logInformation("New game requested");
+    _newGameRequested = true;
+}
+
+void BattleshipGame::registerEventHandlers()
+{
+    _eventBus->registerHandler<Events::PlayerReady>(std::bind(
+        &BattleshipGame::handlePlayerReady, this, std::placeholders::_1
+    ));
+
+    _eventBus->registerHandler<Events::OpponentReady>(std::bind(
+        &BattleshipGame::handleOpponentReady, this, std::placeholders::_1
+    ));
+
+    _eventBus->registerHandler<Events::GameStarted>(std::bind(
+        &BattleshipGame::handleGameStarted, this, std::placeholders::_1
+    ));
+
+    _eventBus->registerHandler<Events::ShotFired>(std::bind(
+        &BattleshipGame::handleShotFired, this, std::placeholders::_1
+    ));
+
+    _eventBus->registerHandler<Events::ShotResultAnnounced>(std::bind(
+        &BattleshipGame::handleShotResultAnnounced, this, std::placeholders::_1
+    ));
+
+    _eventBus->registerHandler<Events::GameOver>(std::bind(
+        &BattleshipGame::handleGameOver, this, std::placeholders::_1
+    ));
+
+    _eventBus->registerHandler<Events::NewGame>(std::bind(
+        &BattleshipGame::handleNewGame, this, std::placeholders::_1
+    ));
 }

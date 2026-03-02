@@ -31,7 +31,7 @@ StartButton::StartButton(
     _startClickingText = _font->createImage(text, SDL_Color{0, 0, 0, 255});
 
     _sprite = std::make_unique<Engine::Sprite>(
-        "start_button_ttf.png",
+        "start_button.png",
         position,
         frameDimensions,
         frames

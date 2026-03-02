@@ -25,10 +25,12 @@ HumanPlayer::HumanPlayer()
         currentResolution
     );
 
-    _statCounter = std::make_unique<StatCounter>(
+    _shipCounter = std::make_unique<ShipCounter>(
         Engine::Position(74, 610).scale(defaultResolution, currentResolution),
         currentResolution
     );
+
+    _gameSummary = std::make_unique<GameSummary>(currentResolution);
 
     _ships = std::array<std::shared_ptr<Ship>, 5> ({
         std::make_shared<Carrier>(Engine::Position(675, 75).scale(defaultResolution, currentResolution)),
@@ -73,6 +75,10 @@ void HumanPlayer::processEvent(const SDL_Event & event)
         case PlayerState::ATTACKING:
             processAttackEvents(event);
             break;
+        
+        case PlayerState::GAME_OVER:
+            _gameSummary->processEvent(event);
+            break;
 
         default:
             break;
@@ -89,7 +95,7 @@ void HumanPlayer::update()
             break;
 
         case PlayerState::READY_TO_PLAY:
-            _statCounter->update();
+            _shipCounter->update();
             break;
 
         case PlayerState::DEFENDING:
@@ -99,15 +105,16 @@ void HumanPlayer::update()
                 _needToAnnounceShotResult = false;
                 _state = PlayerState::ATTACKING;
             }
-            _statCounter->update();
+            _shipCounter->update();
             break;
 
         case PlayerState::ATTACKING:
-            _statCounter->update();
+            _shipCounter->update();
             break;
 
         case PlayerState::GAME_OVER:
-            _statCounter->update();
+            _shipCounter->update();
+            _gameSummary->update();
             break;
 
         default:
@@ -119,19 +126,31 @@ void HumanPlayer::draw()
 {
     _playerGrid->draw();
 
-    if (_state == PlayerState::PLACING_SHIPS)
-        _startButton->draw();
-
-    if (_state != PlayerState::PLACING_SHIPS)
-    {
-        _opponentGrid->draw();
-        _statCounter->draw();
-    }
-    
     std::for_each(_ships.cbegin(), _ships.cend(), [](const std::shared_ptr<Ship> & ship)
     {
         ship->draw();
     });
+    
+    switch (_state)
+    {
+        case PlayerState::PLACING_SHIPS:
+            _startButton->draw();
+            break;
+
+        case PlayerState::READY_TO_PLAY:
+            break;
+
+        case PlayerState::DEFENDING:
+        case PlayerState::ATTACKING:
+            _opponentGrid->draw();
+            _shipCounter->draw();
+            break;
+
+        case PlayerState::GAME_OVER:
+            _opponentGrid->draw();
+            _gameSummary->draw();
+            break;
+    }
 }
 
 void HumanPlayer::processShipEvent(const SDL_Event & event)
