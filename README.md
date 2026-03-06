@@ -85,9 +85,9 @@ Example configuration:
 
 ## Contributing
 
-Bug reports and pull requests are welcome. Feature requests too, though they may be declined if they fall outside the scope of the project — this is a small hobby project, not a commercial product, and it will stay that way.
+This is a personal hobby project that I'm sharing for fun, not something I'm actively maintaining as a collaborative effort. I'm not looking for contributions, but feel free to fork and do whatever you like with it under the terms of the GPL-3.0.
 
-Changes will be reviewed at my own pace.
+Bug reports are still welcome if you run into something broken.
 
 ## License
 
