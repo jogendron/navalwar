@@ -32,6 +32,8 @@ Configuration::Configuration(
     
     if (!Json::parseFromStream(reader, stream, &root, &errors)) 
         throw std::runtime_error("Cannot parse config file");
+        
+    stream.close();
 
     _windowTitle = root["window"]["title"].asString();
 
