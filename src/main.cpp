@@ -2,7 +2,7 @@
 #include <memory>
 
 #include "engine/engine.hpp"
-#include "battleship_game.hpp"
+#include "naval_war_game.hpp"
 
 int main(int argc, char * argv[])
 {
@@ -11,8 +11,8 @@ int main(int argc, char * argv[])
 
     try
     {
-        Engine::Engine::init(argc, argv, "battleship");
-        game = std::make_shared<BattleshipGame>();
+        Engine::Engine::init(argc, argv, "navalwar");
+        game = std::make_shared<NavalWarGame>();
         
         Engine::Engine::getInstance().run(game);
     }

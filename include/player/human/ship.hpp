@@ -1,5 +1,5 @@
-#ifndef __BATTLESHIP_PLAYER_HUMAN_SHIP_HPP
-#define __BATTLESHIP_PLAYER_HUMAN_SHIP_HPP
+#ifndef __NAVALWAR_PLAYER_HUMAN_SHIP_HPP
+#define __NAVALWAR_PLAYER_HUMAN_SHIP_HPP
 
 #include <string>
 #include <vector>

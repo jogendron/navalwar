@@ -1,5 +1,5 @@
-#ifndef __BATTLESHIP_PLAYER_HUMAN_GAMEPANEL_HPP
-#define __BATTLESHIP_PLAYER_HUMAN_GAMEPANEL_HPP
+#ifndef __NAVALWAR_PLAYER_HUMAN_GAMEPANEL_HPP
+#define __NAVALWAR_PLAYER_HUMAN_GAMEPANEL_HPP
 
 #include "engine/engine.hpp"
 #include "engine/entity.hpp"

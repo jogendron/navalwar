@@ -75,7 +75,7 @@ Engine::Engine::~Engine()
 
 void Engine::Engine::init(int argc, char * argv[], const std::string & gameName)
 {
-    PathFactory::init(std::string(argv[0]));
+    PathFactory::init();
 
     if (! SDL_Init(SDL_INIT_VIDEO))
     {

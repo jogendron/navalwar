@@ -1,5 +1,5 @@
-#ifndef __BATTLESHIP_ENGINE_ENGINE_HPP
-#define __BATTLESHIP_ENGINE_ENGINE_HPP
+#ifndef __NAVALWAR_ENGINE_ENGINE_HPP
+#define __NAVALWAR_ENGINE_ENGINE_HPP
 
 #include <memory>
 #include <string>

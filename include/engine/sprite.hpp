@@ -1,5 +1,5 @@
-#ifndef __BATTLESHIP_SPRITE_HPP
-#define __BATTLESHIP_SPRITE_HPP
+#ifndef __NAVALWAR_SPRITE_HPP
+#define __NAVALWAR_SPRITE_HPP
 
 #include <string>
 #include <vector>

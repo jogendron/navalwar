@@ -1,6 +1,6 @@
 {
     "start-button": "Start",
-    "ship-counter.ships-left": "Ships Left : ",
+    "ship-counter.ships-left": "Ships left : ",
     "game-summary.victory": "Victory !",
     "game-summary.defeat": "Defeat !",
     "game-summary.hits": "Hits : ",

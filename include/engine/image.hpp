@@ -1,5 +1,5 @@
-#ifndef __BATTLESHIP_ENGINE_IMAGE_HPP
-#define __BATTLESHIP_ENGINE_IMAGE_HPP
+#ifndef __NAVALWAR_ENGINE_IMAGE_HPP
+#define __NAVALWAR_ENGINE_IMAGE_HPP
 
 #include "configuration.hpp"
 #include "dimensions.hpp"

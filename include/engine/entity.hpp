@@ -1,5 +1,5 @@
-#ifndef __BATTLESHIP_ENTITY_HPP
-#define __BATTLESHIP_ENTITY_HPP
+#ifndef __NAVALWAR_ENTITY_HPP
+#define __NAVALWAR_ENTITY_HPP
 
 #include <memory>
 

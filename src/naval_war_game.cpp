@@ -1,4 +1,4 @@
-#include "battleship_game.hpp"
+#include "naval_war_game.hpp"
 #include "engine/engine.hpp"
 #include "engine/resolution.hpp"
 
@@ -7,9 +7,9 @@
 
 #include <algorithm>
 
-BattleshipGame::BattleshipGame()
+NavalWarGame::NavalWarGame()
 :   Game(), 
-    _state (BattleshipGameState::PRE_GAME),
+    _state (NavalWarGameState::PRE_GAME),
     _playerIsReady(false),
     _opponentIsReady(false),
     _newGameRequested(false)
@@ -26,16 +26,16 @@ BattleshipGame::BattleshipGame()
     registerEventHandlers();
 }
 
-BattleshipGame::~BattleshipGame()
+NavalWarGame::~NavalWarGame()
 {
 }
 
-void BattleshipGame::processEvent(const SDL_Event & event)
+void NavalWarGame::processEvent(const SDL_Event & event)
 {
     _player->processEvent(event);
 }
 
-void BattleshipGame::update()
+void NavalWarGame::update()
 {
     _eventBus->processEvents();
     _player->update();
@@ -43,10 +43,10 @@ void BattleshipGame::update()
 
     switch (_state)
     {
-        case BattleshipGameState::PRE_GAME:           
+        case NavalWarGameState::PRE_GAME:           
             if (_playerIsReady && _opponentIsReady)
             {
-                _state = BattleshipGameState::GAMING;
+                _state = NavalWarGameState::GAMING;
 
                 srand(time(NULL));
                 bool playerPlaysFirst = rand() % 2 == 0;
@@ -56,15 +56,15 @@ void BattleshipGame::update()
             }
             break;
         
-        case BattleshipGameState::GAMING:
+        case NavalWarGameState::GAMING:
             break;
 
-        case BattleshipGameState::POST_GAME:
+        case NavalWarGameState::POST_GAME:
             if (_newGameRequested)
             {
                 _eventBus->reset();
 
-                _state = BattleshipGameState::PRE_GAME;
+                _state = NavalWarGameState::PRE_GAME;
                 _playerIsReady = false;
                 _opponentIsReady = false;
                 _newGameRequested = false;
@@ -77,43 +77,43 @@ void BattleshipGame::update()
     }
 }
 
-void BattleshipGame::render()
+void NavalWarGame::render()
 {
     _background->draw();
     _player->draw();
 }
 
-void BattleshipGame::handlePlayerReady(std::shared_ptr<Events::PlayerReady> event)
+void NavalWarGame::handlePlayerReady(std::shared_ptr<Events::PlayerReady> event)
 {
     _logger->logInformation("Player is ready to play");
 
     _playerIsReady = true;
 }
 
-void BattleshipGame::handleOpponentReady(std::shared_ptr<Events::OpponentReady> event)
+void NavalWarGame::handleOpponentReady(std::shared_ptr<Events::OpponentReady> event)
 {
     _logger->logInformation("Opponent is ready to play");
 
     _opponentIsReady = true;
 }
 
-void BattleshipGame::handleGameStarted(std::shared_ptr<Events::GameStarted> event)
+void NavalWarGame::handleGameStarted(std::shared_ptr<Events::GameStarted> event)
 {
     bool playerIsAttacking = event->getFirstPlayer() == PlayerType::PLAYER;
 
     std::string firstPlayer = playerIsAttacking ? "Player" : "Opponent";
     _logger->logInformation("Game started, " + firstPlayer + " plays first");
 
-    _state = BattleshipGameState::GAMING;
+    _state = NavalWarGameState::GAMING;
 }
 
-void BattleshipGame::handleShotFired(std::shared_ptr<Events::ShotFired> event)
+void NavalWarGame::handleShotFired(std::shared_ptr<Events::ShotFired> event)
 {
     std::string initiator = event->getInitiator() == PlayerType::PLAYER ? "Player" : "Opponent";
     _logger->logInformation(initiator + " fired a shot at " + event->getPositionName());
 }
 
-void BattleshipGame::handleShotResultAnnounced(std::shared_ptr<Events::ShotResultAnnounced> event)
+void NavalWarGame::handleShotResultAnnounced(std::shared_ptr<Events::ShotResultAnnounced> event)
 {
     std::string shotInitiator = event->getInitiator() == PlayerType::PLAYER ? "Opponent" : "Player";
     std::string positionName = event->getPositionName();
@@ -151,47 +151,47 @@ void BattleshipGame::handleShotResultAnnounced(std::shared_ptr<Events::ShotResul
     }
 }
 
-void BattleshipGame::handleGameOver(std::shared_ptr<Events::GameOver> event)
+void NavalWarGame::handleGameOver(std::shared_ptr<Events::GameOver> event)
 {
     std::string winner = event->getWinner() == PlayerType::PLAYER ? "Player" : "Opponent";
     _logger->logInformation("Game over. " + winner + " wins!");
 
-    _state = BattleshipGameState::POST_GAME;
+    _state = NavalWarGameState::POST_GAME;
 }
 
-void BattleshipGame::handleNewGame(std::shared_ptr<Events::NewGame> event)
+void NavalWarGame::handleNewGame(std::shared_ptr<Events::NewGame> event)
 {
     _logger->logInformation("New game requested");
     _newGameRequested = true;
 }
 
-void BattleshipGame::registerEventHandlers()
+void NavalWarGame::registerEventHandlers()
 {
     _eventBus->registerHandler<Events::PlayerReady>(std::bind(
-        &BattleshipGame::handlePlayerReady, this, std::placeholders::_1
+        &NavalWarGame::handlePlayerReady, this, std::placeholders::_1
     ));
 
     _eventBus->registerHandler<Events::OpponentReady>(std::bind(
-        &BattleshipGame::handleOpponentReady, this, std::placeholders::_1
+        &NavalWarGame::handleOpponentReady, this, std::placeholders::_1
     ));
 
     _eventBus->registerHandler<Events::GameStarted>(std::bind(
-        &BattleshipGame::handleGameStarted, this, std::placeholders::_1
+        &NavalWarGame::handleGameStarted, this, std::placeholders::_1
     ));
 
     _eventBus->registerHandler<Events::ShotFired>(std::bind(
-        &BattleshipGame::handleShotFired, this, std::placeholders::_1
+        &NavalWarGame::handleShotFired, this, std::placeholders::_1
     ));
 
     _eventBus->registerHandler<Events::ShotResultAnnounced>(std::bind(
-        &BattleshipGame::handleShotResultAnnounced, this, std::placeholders::_1
+        &NavalWarGame::handleShotResultAnnounced, this, std::placeholders::_1
     ));
 
     _eventBus->registerHandler<Events::GameOver>(std::bind(
-        &BattleshipGame::handleGameOver, this, std::placeholders::_1
+        &NavalWarGame::handleGameOver, this, std::placeholders::_1
     ));
 
     _eventBus->registerHandler<Events::NewGame>(std::bind(
-        &BattleshipGame::handleNewGame, this, std::placeholders::_1
+        &NavalWarGame::handleNewGame, this, std::placeholders::_1
     ));
 }

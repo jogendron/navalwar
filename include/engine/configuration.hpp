@@ -1,5 +1,5 @@
-#ifndef __BATTLESHIP_ENGINE_CONFIGURATION_HPP
-#define __BATTLESHIP_ENGINE_CONFIGURATION_HPP
+#ifndef __NAVALWAR_ENGINE_CONFIGURATION_HPP
+#define __NAVALWAR_ENGINE_CONFIGURATION_HPP
 
 #include "localization.hpp"
 #include "resolution.hpp"

@@ -1,5 +1,5 @@
-#ifndef __BATTLESHIP_BATTLESHIP_GAME_HPP
-#define __BATTLESHIP_BATTLESHIP_GAME_HPP
+#ifndef __NAVALWAR_BATTLESHIP_GAME_HPP
+#define __NAVALWAR_BATTLESHIP_GAME_HPP
 
 #include <memory>
 
@@ -17,18 +17,18 @@
 #include "events/shot_result_announced.hpp"
 #include "events/new_game.hpp"
 
-enum BattleshipGameState
+enum NavalWarGameState
 {
     PRE_GAME,
     GAMING,
     POST_GAME
 };
 
-class BattleshipGame : public Engine::Game
+class NavalWarGame : public Engine::Game
 {
     public:
-        BattleshipGame();
-        ~BattleshipGame();
+        NavalWarGame();
+        ~NavalWarGame();
 
         void processEvent(const SDL_Event & event);
         void update();
@@ -38,7 +38,7 @@ class BattleshipGame : public Engine::Game
         std::shared_ptr<Engine::EventBus> _eventBus;
         std::shared_ptr<Engine::Logger> _logger;
         
-        BattleshipGameState _state;
+        NavalWarGameState _state;
         bool _playerIsReady;
         bool _opponentIsReady;
         bool _newGameRequested;

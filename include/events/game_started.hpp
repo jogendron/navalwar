@@ -1,5 +1,5 @@
-#ifndef __BATTLESHIP_EVENTS_NEWGAME_HPP
-#define __BATTLESHIP_EVENTS_NEWGAME_HPP
+#ifndef __NAVALWAR_EVENTS_NEWGAME_HPP
+#define __NAVALWAR_EVENTS_NEWGAME_HPP
 
 #include "engine/event.hpp"
 #include "player_type.hpp"

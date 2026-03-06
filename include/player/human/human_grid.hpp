@@ -1,5 +1,5 @@
-#ifndef __BATTLESHIP_PLAYER_HUMAN_GRID_HPP
-#define __BATTLESHIP_PLAYER_HUMAN_GRID_HPP
+#ifndef __NAVALWAR_PLAYER_HUMAN_GRID_HPP
+#define __NAVALWAR_PLAYER_HUMAN_GRID_HPP
 
 #include "player/grid.hpp"
 #include "player/human/ship.hpp"

@@ -1,5 +1,5 @@
-#ifndef __BATTLESHIP_ENGINE_FONT_HPP
-#define __BATTLESHIP_ENGINE_FONT_HPP
+#ifndef __NAVALWAR_ENGINE_FONT_HPP
+#define __NAVALWAR_ENGINE_FONT_HPP
 
 #include "image.hpp"
 #include "resource_manager.hpp"

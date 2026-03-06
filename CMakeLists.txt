@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.20)
-project(battleship)
+project(navalwar)
 
 set(CMAKE_CXX_STANDARD 23)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -19,6 +19,10 @@ if (NOT SDL3_IMAGE_FOUND)
     endif()
 endif()
 
+if (NOT SDL3_IMAGE_FOUND)
+    message(FATAL_ERROR "SDL3_image not found! Make sure it is installed.")
+endif()
+
 # Find sdl3_ttf
 find_package(SDL3_ttf QUIET)
 
@@ -31,8 +35,8 @@ if (NOT SDL3_ttf_FOUND)
     endif()
 endif()
 
-if (NOT SDL3_IMAGE_FOUND)
-    message(FATAL_ERROR "SDL3_image not found! Make sure it is installed.")
+if (NOT SDL3_ttf_FOUND)
+    message(FATAL_ERROR "SDL3_ttf not found! Make sure it is installed.")
 endif()
 
 # Find jsoncpp
@@ -46,9 +50,9 @@ else()
     pkg_check_modules(JSONCPP REQUIRED jsoncpp)
 endif()
 
-add_executable(battleship
+add_executable(navalwar
     src/main.cpp
-    src/battleship_game.cpp
+    src/naval_war_game.cpp
     src/player/player.cpp
     src/player/grid.cpp
     src/player/cell.cpp
@@ -92,7 +96,7 @@ add_executable(battleship
 )
 
 target_include_directories(
-    battleship 
+    navalwar 
     PUBLIC 
     include 
     ${SDL3_INCLUDE_DIRS}
@@ -100,10 +104,35 @@ target_include_directories(
 )
 
 target_link_libraries(
-    battleship 
+    navalwar 
     PRIVATE 
     SDL3::SDL3 
     SDL3_image::SDL3_image 
     SDL3_ttf::SDL3_ttf
     ${JSONCPP_LIBRARIES}
+)
+
+# Installation
+include(GNUInstallDirs)
+
+# Uninstall target
+configure_file(
+    "${CMAKE_SOURCE_DIR}/cmake/cmake_uninstall.cmake.in"
+    "${CMAKE_BINARY_DIR}/cmake_uninstall.cmake"
+    @ONLY
+)
+add_custom_target(uninstall
+    COMMAND "${CMAKE_COMMAND}" -P "${CMAKE_BINARY_DIR}/cmake_uninstall.cmake"
+)
+
+install(TARGETS navalwar
+    RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
+)
+
+install(DIRECTORY share/navalwar/
+    DESTINATION ${CMAKE_INSTALL_DATADIR}/navalwar
+)
+
+install(DIRECTORY etc/navalwar/
+    DESTINATION ${CMAKE_INSTALL_SYSCONFDIR}/navalwar
 )

@@ -1,5 +1,5 @@
-#ifndef __BATTLESHIP_ENGINE_PATH_FACTORY_HPP
-#define __BATTLESHIP_ENGINE_PATH_FACTORY_HPP
+#ifndef __NAVALWAR_ENGINE_PATH_FACTORY_HPP
+#define __NAVALWAR_ENGINE_PATH_FACTORY_HPP
 
 #include <filesystem>
 #include <string>
@@ -12,7 +12,7 @@ namespace Engine
             PathFactory() = delete;
             ~PathFactory() = delete;
 
-            static void init(const std::string & firstArgument);
+            static void init();
             static std::filesystem::path createPath(const std::string & path);
 
         private:

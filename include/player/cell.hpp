@@ -1,5 +1,5 @@
-#ifndef __BATTLESHIP_PLAYER_CELL_HPP
-#define __BATTLESHIP_PLAYER_CELL_HPP
+#ifndef __NAVALWAR_PLAYER_CELL_HPP
+#define __NAVALWAR_PLAYER_CELL_HPP
 
 #include "engine/dimensions.hpp"
 #include "engine/entity.hpp"

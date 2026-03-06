@@ -1,0 +1,35 @@
+if(NOT EXISTS "@CMAKE_BINARY_DIR@/install_manifest.txt")
+    message(FATAL_ERROR "Cannot find install manifest: @CMAKE_BINARY_DIR@/install_manifest.txt")
+endif()
+
+file(READ "@CMAKE_BINARY_DIR@/install_manifest.txt" files)
+string(REGEX REPLACE "\n" ";" files "${files}")
+
+foreach(file ${files})
+    message(STATUS "Uninstalling: ${file}")
+    if(IS_SYMLINK "${file}" OR EXISTS "${file}")
+        execute_process(
+            COMMAND "@CMAKE_COMMAND@" -E remove "${file}"
+            OUTPUT_VARIABLE rm_out
+            RESULT_VARIABLE rm_result
+        )
+        if(NOT "${rm_result}" STREQUAL "0")
+            message(FATAL_ERROR "Problem removing: ${file}")
+        endif()
+    else()
+        message(STATUS "File not found: ${file} (skipping)")
+    endif()
+endforeach()
+
+# Remove project-owned directories
+set(project_dirs
+    "@CMAKE_INSTALL_FULL_SYSCONFDIR@/@PROJECT_NAME@"
+    "@CMAKE_INSTALL_FULL_DATADIR@/@PROJECT_NAME@"
+)
+
+foreach(dir ${project_dirs})
+    if(IS_DIRECTORY "${dir}")
+        message(STATUS "Removing directory: ${dir}")
+        file(REMOVE_RECURSE "${dir}")
+    endif()
+endforeach()

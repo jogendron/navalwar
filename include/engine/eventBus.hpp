@@ -1,5 +1,5 @@
-#ifndef __BATTLESHIP_ENGINE_EVENTBUS_HPP
-#define __BATTLESHIP_ENGINE_EVENTBUS_HPP
+#ifndef __NAVALWAR_ENGINE_EVENTBUS_HPP
+#define __NAVALWAR_ENGINE_EVENTBUS_HPP
 
 #include <functional>
 #include <list>

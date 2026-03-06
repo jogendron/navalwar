@@ -1,5 +1,5 @@
-#ifndef __BATTLESHIP_EVENTS_NEW_GAME_HPP
-#define __BATTLESHIP_EVENTS_NEW_GAME_HPP
+#ifndef __NAVALWAR_EVENTS_NEW_GAME_HPP
+#define __NAVALWAR_EVENTS_NEW_GAME_HPP
 
 #include "engine/event.hpp"
 

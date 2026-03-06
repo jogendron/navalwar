@@ -1,5 +1,5 @@
-#ifndef __BATTLESHIP_ENGINE_POSITION_HPP
-#define __BATTLESHIP_ENGINE_POSITION_HPP
+#ifndef __NAVALWAR_ENGINE_POSITION_HPP
+#define __NAVALWAR_ENGINE_POSITION_HPP
 
 #include "engine/resolution.hpp"
 
