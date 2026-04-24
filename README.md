@@ -58,15 +58,17 @@ Supported resolutions:
 * 3840x2160
 
 You can set the locale to `"auto"` for the game to detect your system language and fall back to English if no translation is available. It can also be set to a specific language code directly. Translations are currently available for:
-* English (en)
-* French (fr)
+* english (en)
+* french (fr)
 
 Log levels:
-* Critical
-* Error
-* Warning
-* Information
-* Debug
+* critical
+* error
+* warning
+* information
+* debug
+
+Opponent difficulty can be either set to "easy" or "normal".
 
 Example configuration:
 ```json
@@ -79,7 +81,10 @@ Example configuration:
         }
     },
     "locale": "fr",
-    "logLevel": "Information"
+    "logLevel": "Information",
+    "opponent": {
+        "difficulty": "normal"
+    }
 }
 ```
 

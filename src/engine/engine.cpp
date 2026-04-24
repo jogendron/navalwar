@@ -203,11 +203,11 @@ void Engine::Engine::run(std::shared_ptr<Game> game)
 void Engine::Engine::setLogLevel(const std::string & logLevel)
 {
     std::map<std::string, SDL_LogPriority> logLevels = {
-        {"Critical", SDL_LOG_PRIORITY_CRITICAL},
-        {"Error", SDL_LOG_PRIORITY_ERROR},
-        {"Warning", SDL_LOG_PRIORITY_WARN},
-        {"Information", SDL_LOG_PRIORITY_INFO},
-        {"Debug", SDL_LOG_PRIORITY_DEBUG}
+        {"critical", SDL_LOG_PRIORITY_CRITICAL},
+        {"error", SDL_LOG_PRIORITY_ERROR},
+        {"warning", SDL_LOG_PRIORITY_WARN},
+        {"information", SDL_LOG_PRIORITY_INFO},
+        {"debug", SDL_LOG_PRIORITY_DEBUG}
     };
 
     SDL_LogPriority sdlLogLevel = SDL_LOG_PRIORITY_ERROR;

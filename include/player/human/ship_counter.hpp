@@ -3,7 +3,7 @@
 
 #include "engine/engine.hpp"
 #include "engine/entity.hpp"
-#include "engine/eventBus.hpp"
+#include "engine/event_bus.hpp"
 #include "engine/font.hpp"
 #include "engine/image.hpp"
 #include "engine/localization.hpp"

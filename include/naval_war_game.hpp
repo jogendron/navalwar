@@ -4,7 +4,7 @@
 #include <memory>
 
 #include "engine/game.hpp"
-#include "engine/eventBus.hpp"
+#include "engine/event_bus.hpp"
 #include "engine/logger.hpp"
 
 #include "player/player.hpp"
@@ -47,6 +47,8 @@ class NavalWarGame : public Engine::Game
 
         std::unique_ptr<Player::Player> _player;
         std::unique_ptr<Player::Player> _opponent;
+
+        void initializeOpponent();
 
         void handlePlayerReady(std::shared_ptr<Events::PlayerReady> event);
         void handleOpponentReady(std::shared_ptr<Events::OpponentReady> event);

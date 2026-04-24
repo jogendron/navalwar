@@ -2,7 +2,7 @@
 #define __NAVALWAR_PLAYER_PLAYER_HPP
 
 #include "engine/entity.hpp"
-#include "engine/eventBus.hpp"
+#include "engine/event_bus.hpp"
 #include "engine/logger.hpp"
 
 #include "player/grid.hpp"

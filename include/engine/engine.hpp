@@ -10,7 +10,7 @@
 #include <SDL3/SDL_timer.h>
 
 #include "engine/configuration.hpp"
-#include "engine/eventBus.hpp"
+#include "engine/event_bus.hpp"
 #include "engine/game.hpp"
 #include "engine/localization.hpp"
 #include "engine/logger.hpp"

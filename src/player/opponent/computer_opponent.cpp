@@ -1,35 +1,35 @@
-#include "player/ai/ai_opponent.hpp"
+#include "player/opponent/computer_opponent.hpp"
 
 #include "events/opponent_ready.hpp"
 
 #include <set>
 
-using namespace Player::AI;
+using namespace Player::Opponent;
 
-AIOpponent::AIOpponent() 
+ComputerOpponent::ComputerOpponent() 
 :   Player()
 {
     _playerGrid = std::make_unique<Grid>(Engine::Position(25,25));
     _opponentGrid = std::make_unique<Grid>(Engine::Position(675,25));
 
     _eventBus->registerHandler<Events::GameStarted>(std::bind(
-        &AIOpponent::handleGameStarted, this, std::placeholders::_1
+        &ComputerOpponent::handleGameStarted, this, std::placeholders::_1
     ));
 
     _eventBus->registerHandler<Events::ShotFired>(std::bind(
-        &AIOpponent::handleShotFired, this, std::placeholders::_1
+        &ComputerOpponent::handleShotFired, this, std::placeholders::_1
     ));
 
     _eventBus->registerHandler<Events::ShotResultAnnounced>(std::bind(
-        &AIOpponent::handleShotResultAnnounced, this, std::placeholders::_1
+        &ComputerOpponent::handleShotResultAnnounced, this, std::placeholders::_1
     ));
 }
 
-AIOpponent::~AIOpponent() 
+ComputerOpponent::~ComputerOpponent() 
 {
 }
 
-void AIOpponent::update()
+void ComputerOpponent::update()
 {
     switch (_state)
     {
@@ -64,7 +64,94 @@ void AIOpponent::update()
     }
 }
 
-void AIOpponent::placeShips()
+void ComputerOpponent::attackRandomCell()
+{
+    std::vector<std::string> untouchedCells;
+
+    for (char row = 'A'; row <= 'J'; row++)
+    {
+        for (int col = 1; col <= 10; col++)
+        {
+            std::string positionName = std::string(1, row) + std::to_string(col);
+            Cell & cell = _opponentGrid->getCell(positionName);
+
+            if (cell.getState() == CellState::INITIAL)
+                untouchedCells.push_back(positionName);
+        }
+    }
+
+    srand(time(NULL));
+    int index = rand() % untouchedCells.size();
+    std::string target = untouchedCells[index];
+
+    attackCell(target);
+}
+
+void ComputerOpponent::attackCell(const std::string & positionName)
+{
+    _state = PlayerState::DEFENDING;
+    _eventBus->publish(std::make_shared<Events::ShotFired>(PlayerType::OPPONENT, positionName));
+}
+
+void ComputerOpponent::handleGameStarted(std::shared_ptr<Events::GameStarted> event)
+{
+    if (event->getFirstPlayer() == PlayerType::OPPONENT)
+        _state = PlayerState::ATTACKING;
+    else
+        _state = PlayerState::DEFENDING;
+}
+
+Events::ShotResult ComputerOpponent::applyShotFired(
+    std::vector<std::reference_wrapper<Cell>> & ship,
+    std::shared_ptr<Events::ShotFired> event
+)
+{
+    Events::ShotResult result = Events::ShotResult::MISS;
+    const std::string & positionName = event->getPositionName();
+    bool hit = false;
+    bool sunk = true;
+
+    for (auto cell : ship)
+    {
+        if (cell.get().getPositionName() == positionName)
+        {
+            hit = true;
+            cell.get().setState(CellState::HIT);
+        }
+
+        sunk = sunk && (cell.get().getState() == CellState::HIT);
+    }
+
+    if (sunk && hit) // Don't want to announce a sunk ship if it was not hit
+        result = Events::ShotResult::SUNK;
+    else if (hit)
+        result = Events::ShotResult::HIT;
+
+    return result;
+}
+
+void ComputerOpponent::handleShotResultAnnounced(std::shared_ptr<Events::ShotResultAnnounced> event)
+{
+    if (event->getInitiator() == PlayerType::PLAYER)
+    {
+        const std::string & positionName = event->getPositionName();
+        Cell & cell = _opponentGrid->getCell(positionName);
+
+        switch (event->getShotResult())
+        {
+            case Events::ShotResult::HIT:
+            case Events::ShotResult::SUNK:
+                cell.setState(CellState::HIT);
+                break;
+
+            case Events::ShotResult::MISS:
+                cell.setState(CellState::MISSED);
+                break;
+        }
+    }
+}
+
+void ComputerOpponent::placeShips()
 {
     placeShip(_carrier, 5);
     placeShip(_battleship, 4);
@@ -73,7 +160,7 @@ void AIOpponent::placeShips()
     placeShip(_destroyer, 2);
 }
 
-void AIOpponent::placeShip(std::vector<std::reference_wrapper<Cell>> & ship, int shipLength)
+void ComputerOpponent::placeShip(std::vector<std::reference_wrapper<Cell>> & ship, int shipLength)
 {
     std::vector<std::vector<std::reference_wrapper<Cell>>> possiblePlacements;
     std::set<std::string> otherShipsCells;
@@ -156,15 +243,7 @@ void AIOpponent::placeShip(std::vector<std::reference_wrapper<Cell>> & ship, int
     }
 }
 
-void AIOpponent::handleGameStarted(std::shared_ptr<Events::GameStarted> event)
-{
-    if (event->getFirstPlayer() == PlayerType::OPPONENT)
-        _state = PlayerState::ATTACKING;
-    else
-        _state = PlayerState::DEFENDING;
-}
-
-void AIOpponent::handleShotFired(std::shared_ptr<Events::ShotFired> event)
+void ComputerOpponent::handleShotFired(std::shared_ptr<Events::ShotFired> event)
 {
     if (event->getInitiator() == PlayerType::PLAYER)
     {
@@ -196,55 +275,5 @@ void AIOpponent::handleShotFired(std::shared_ptr<Events::ShotFired> event)
         );
 
         _needToAnnounceShotResult = true;
-    }
-}
-
-Events::ShotResult AIOpponent::applyShotFired(
-    std::vector<std::reference_wrapper<Cell>> & ship,
-    std::shared_ptr<Events::ShotFired> event
-)
-{
-    Events::ShotResult result = Events::ShotResult::MISS;
-    const std::string & positionName = event->getPositionName();
-    bool hit = false;
-    bool sunk = true;
-
-    for (auto cell : ship)
-    {
-        if (cell.get().getPositionName() == positionName)
-        {
-            hit = true;
-            cell.get().setState(CellState::HIT);
-        }
-
-        sunk = sunk && (cell.get().getState() == CellState::HIT);
-    }
-
-    if (sunk && hit) // Don't want to announce a sunk ship if it was not hit
-        result = Events::ShotResult::SUNK;
-    else if (hit)
-        result = Events::ShotResult::HIT;
-
-    return result;
-}
-
-void AIOpponent::handleShotResultAnnounced(std::shared_ptr<Events::ShotResultAnnounced> event)
-{
-    if (event->getInitiator() == PlayerType::PLAYER)
-    {
-        const std::string & positionName = event->getPositionName();
-        Cell & cell = _opponentGrid->getCell(positionName);
-
-        switch (event->getShotResult())
-        {
-            case Events::ShotResult::HIT:
-            case Events::ShotResult::SUNK:
-                cell.setState(CellState::HIT);
-                break;
-
-            case Events::ShotResult::MISS:
-                cell.setState(CellState::MISSED);
-                break;
-        }
     }
 }

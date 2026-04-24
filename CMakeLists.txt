@@ -68,8 +68,9 @@ add_executable(navalwar
     src/player/human/human_player.cpp
     src/player/human/game_summary.cpp
     src/player/human/new_game_button.cpp
-    src/player/ai/ai_opponent.cpp
-    src/player/ai/ai_easy_opponent.cpp
+    src/player/opponent/computer_opponent.cpp
+    src/player/opponent/easy_computer_opponent.cpp
+    src/player/opponent/normal_computer_opponent.cpp
     src/events/game_over.cpp
     src/events/game_started.cpp
     src/events/opponent_ready.cpp
@@ -82,7 +83,7 @@ add_executable(navalwar
     src/engine/engine.cpp
     src/engine/entity.cpp
     src/engine/event.cpp
-    src/engine/eventBus.cpp
+    src/engine/event_bus.cpp
     src/engine/font.cpp
     src/engine/game.cpp
     src/engine/image.cpp

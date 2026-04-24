@@ -3,7 +3,8 @@
 #include "engine/resolution.hpp"
 
 #include "player/human/human_player.hpp"
-#include "player/ai/ai_easy_opponent.hpp"
+#include "player/opponent/easy_computer_opponent.hpp"
+#include "player/opponent/normal_computer_opponent.hpp"
 
 #include <algorithm>
 
@@ -21,7 +22,7 @@ NavalWarGame::NavalWarGame()
     
     _background = std::make_unique<Engine::Image>("background.png");
     _player = std::make_unique<Player::Human::HumanPlayer>();
-    _opponent = std::make_unique<Player::AI::AIEasyOpponent>();
+    initializeOpponent();
 
     registerEventHandlers();
 }
@@ -69,7 +70,7 @@ void NavalWarGame::update()
                 _opponentIsReady = false;
                 _newGameRequested = false;
                 _player = std::make_unique<Player::Human::HumanPlayer>();
-                _opponent = std::make_unique<Player::AI::AIEasyOpponent>();
+                initializeOpponent();
 
                 registerEventHandlers();
             }
@@ -81,6 +82,18 @@ void NavalWarGame::render()
 {
     _background->draw();
     _player->draw();
+}
+
+void NavalWarGame::initializeOpponent()
+{
+    std::string opponentDifficulty = _configuration->getStringValue("opponent.difficulty");
+    
+    if (opponentDifficulty == "easy")
+        _opponent = std::make_unique<Player::Opponent::EasyComputerOpponent>();
+    else if (opponentDifficulty == "normal")
+        _opponent = std::make_unique<Player::Opponent::NormalComputerOpponent>();
+    else
+        throw std::runtime_error("Invalid opponent difficulty. Valid values are: easy, normal");
 }
 
 void NavalWarGame::handlePlayerReady(std::shared_ptr<Events::PlayerReady> event)

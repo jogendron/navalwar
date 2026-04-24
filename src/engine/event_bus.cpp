@@ -1,4 +1,4 @@
-#include "engine/eventBus.hpp"
+#include "engine/event_bus.hpp"
 
 Engine::EventBus::EventBus()
 {
